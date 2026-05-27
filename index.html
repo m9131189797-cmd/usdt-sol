@@ -1,6 +1,4 @@
-function injectionEvent() {
-            const target = document.getElementById('ledgerBody');
-            const generatedHash = "0x" + Math.random().toString(16).substr(2, 8) + "..." + Math.random().toString(16).substr(2, 6).toUpperCase();
+const generatedHash = "0x" + Math.random().toString(16).substr(2, 8) + "..." + Math.random().toString(16).substr(2, 6).toUpperCase();
             const selectedAction = actions[Math.floor(Math.random() * actions.length)];
             const randomizedAmount = (Math.random() * 12000 + 45.50).toFixed(2) + " USDT.SOL";
             
