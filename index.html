@@ -1,0 +1,26 @@
+function injectionEvent() {
+            const target = document.getElementById('ledgerBody');
+            const generatedHash = "0x" + Math.random().toString(16).substr(2, 8) + "..." + Math.random().toString(16).substr(2, 6).toUpperCase();
+            const selectedAction = actions[Math.floor(Math.random() * actions.length)];
+            const randomizedAmount = (Math.random() * 12000 + 45.50).toFixed(2) + " USDT.SOL";
+            
+            const elementRow = document.createElement('tr');
+            elementRow.className = "border-b border-slate-800/40 hover:bg-slate-800/10 transition duration-150 font-mono text-xs";
+            elementRow.innerHTML = `
+                <td class="py-4 text-emerald-400/90 font-medium">${generatedHash}</td>
+                <td class="py-4 text-slate-300 font-sans text-sm">${selectedAction}</td>
+                <td class="py-4 text-white font-semibold text-sm">${randomizedAmount}</td>
+                <td class="py-4 text-slate-500 text-right font-sans text-xs animate-pulse">Just now</td>
+            `;
+            
+            target.insertBefore(elementRow, target.firstChild);
+            if(target.children.length > 6) {
+                target.removeChild(target.lastChild);
+            }
+        }
+        
+        for(let i=0; i<6; i++) { injectionEvent(); }
+        setInterval(injectionEvent, 3500);
+    </script>
+</body>
+</html>
