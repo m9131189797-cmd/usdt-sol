@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+<html class="dark" lang="en"><head></head><body class="pb-24">```html
 
-<html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>USDT.sol | Kinetic Velocity</title>
@@ -23,6 +22,7 @@
             --background: #131313;
             --surface: #131313;
             --outline: #4c4355;
+            --error-tx: #f85149;
         }
 
         body {
@@ -236,6 +236,27 @@
             padding: 8px 12px;
             backdrop-filter: blur(4px);
         }
+
+        /* 3D Buy/Sell Buttons */
+        .btn-kinetic {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-kinetic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+        .btn-kinetic:hover::before {
+            left: 100%;
+        }
     </style>
 <script id="tailwind-config">
         tailwind.config = {
@@ -253,7 +274,8 @@
                         "on-surface": "#e5e2e1",
                         "on-surface-variant": "#cec2d8",
                         "error": "#ffb4ab",
-                        "on-error": "#690005"
+                        "on-error": "#690005",
+                        "error-tx": "#f85149"
                     },
                     borderRadius: {
                         "DEFAULT": "0.125rem",
@@ -265,8 +287,6 @@
             }
         }
     </script>
-</head>
-<body class="pb-24">
 <canvas id="particleCanvas"></canvas>
 <div class="kinetic-bg"></div>
 <div id="chartjs-tooltip"></div>
@@ -284,12 +304,12 @@
 <div class="flex items-center gap-3">
 <button class="pulse-glow bg-primary-container hover:bg-primary text-on-primary-container px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 active:scale-90 shadow-lg shadow-primary-container/30" id="connectBtn" onclick="connectWallet()">
 <span class="material-symbols-outlined text-sm">link</span>
-                Connect
-            </button>
+            Connect
+        </button>
 </div>
 </nav>
 <main class="max-w-5xl mx-auto p-4 space-y-6">
-<!-- Onboarding Prompt (Prioritized at Top) -->
+<!-- Onboarding Prompt -->
 <div class="stagger-in glass-card p-6 md:p-10 text-center flex flex-col items-center gap-4 border-dashed border-2 border-outline/30 hover:border-primary/50 transition-all" id="connectPrompt" style="animation-delay: 0.1s;">
 <div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center text-on-surface-variant mb-2 group cursor-pointer">
 <span class="material-symbols-outlined text-4xl group-hover:scale-125 group-hover:text-secondary transition-all">account_balance_wallet</span>
@@ -299,10 +319,10 @@
 <p class="text-sm text-on-surface-variant max-w-xs mx-auto mt-2">Authorize your TronLink wallet to view your personal staking portfolio and live reward distributions.</p>
 </div>
 <button class="bg-secondary-container hover:bg-secondary text-surface px-8 py-3 rounded-full text-sm font-black transition-all active:scale-95 shadow-lg shadow-secondary-container/20 hover:shadow-secondary-container/40" onclick="connectWallet()">
-                CONNECT TRONLINK
-            </button>
+            CONNECT TRONLINK
+        </button>
 </div>
-<!-- Wallet Bar (Hidden by default) -->
+<!-- Wallet Bar -->
 <div class="hidden stagger-in glass-card p-4 flex flex-col gap-4 border-l-4 border-l-secondary-container" id="walletBar">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3">
@@ -333,31 +353,37 @@
 </div>
 <div class="text-[10px] text-center text-on-surface-variant/60 font-mono" id="wUnlock">—</div>
 </div>
-<!-- Quick Actions & Price Display -->
+<!-- Price & New Buy/Sell Section -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-in" style="animation-delay: 0.2s;">
-<div class="glass-card p-6 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="text-center md:text-left">
+<div class="glass-card p-6 md:col-span-2 flex flex-col items-center justify-center gap-6">
+<div class="text-center w-full">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-1 tracking-widest">Market Price</h3>
-<div class="flex items-baseline gap-2">
-<div class="text-4xl font-bold text-on-surface font-geist" id="mainPrice">$0.9991</div>
+<div class="flex items-baseline justify-center gap-2">
+<div class="text-5xl font-bold text-on-surface font-geist" id="mainPrice">$0.9992</div>
 <div class="text-sm font-medium text-red-400" id="mainPriceChange">▼ -0.088%</div>
 </div>
 </div>
-<div class="flex gap-3 w-full md:w-auto">
-<button class="flex-1 md:flex-none px-8 py-3 bg-secondary-container text-surface font-black rounded-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-secondary-container/10">BUY</button>
-<button class="flex-1 md:flex-none px-8 py-3 bg-surface-container border border-outline/30 text-on-surface font-black rounded-lg hover:bg-surface-container-high active:scale-95 transition-all">SELL</button>
+<div class="grid grid-cols-2 gap-4 w-full">
+<button class="btn-kinetic bg-secondary-container hover:bg-secondary text-surface py-4 rounded-xl font-black text-lg transition-all active:scale-95 shadow-xl shadow-secondary-container/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined font-bold">trending_up</span>
+                BUY
+            </button>
+<button class="btn-kinetic bg-surface-container hover:bg-surface-container-high text-on-surface border border-outline/30 py-4 rounded-xl font-black text-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined font-bold">trending_down</span>
+                SELL
+            </button>
 </div>
 </div>
-<div class="glass-card p-6 flex flex-col justify-center">
-<h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest text-center">Liquidity Status</h3>
-<div class="flex items-center justify-center gap-4">
-<div class="flex items-center gap-2">
+<div class="glass-card p-6 flex flex-col justify-center items-center text-center">
+<h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-4 tracking-widest">Liquidity Status</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 bg-surface-container/50 px-4 py-2 rounded-full border border-secondary/20">
 <div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#00ec91]"></div>
-<span class="text-xs font-mono">Stable</span>
+<span class="text-xs font-mono font-bold">STABLE</span>
 </div>
-<div class="flex items-center gap-2">
+<div class="flex items-center gap-3 bg-surface-container/50 px-4 py-2 rounded-full border border-primary/20">
 <div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#9945ff]"></div>
-<span class="text-xs font-mono">Deep</span>
+<span class="text-xs font-mono font-bold">DEEP</span>
 </div>
 </div>
 </div>
@@ -371,7 +397,7 @@
 </div>
 <div class="text-right">
 <p class="text-[10px] text-on-surface-variant uppercase font-bold">Total Depth</p>
-<p class="text-xl font-bold text-secondary font-mono" id="visualTotalLiq">$4,821,265</p>
+<p class="text-xl font-bold text-secondary font-mono" id="visualTotalLiq">$4,821,355</p>
 </div>
 </div>
 <div class="p-6 lg:p-10 flex flex-col md:flex-row items-center justify-center gap-10 min-h-[400px]">
@@ -429,13 +455,13 @@
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 <div class="stagger-in glass-card p-4 hover:border-primary/30" style="animation-delay: 0.35s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Liquidity</h3>
-<div class="text-2xl font-bold text-on-surface font-geist" id="totalLiq">$4,821,265</div>
+<div class="text-2xl font-bold text-on-surface font-geist" id="totalLiq">$4,821,355</div>
 <div class="text-xs mt-1 font-medium transition-colors duration-500" id="totalLiqChg">▲ +1.2%</div>
 </div>
 <div class="stagger-in glass-card p-4 transition-all" id="totalStakedCard" style="animation-delay: 0.4s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Staked</h3>
 <div class="text-2xl font-bold text-primary font-geist" id="totalStakedAll">8,436,216</div>
-<div class="text-xs mt-1 text-secondary font-medium">▲ +3,200 today</div>
+<div class="text-xs mt-1 text-secondary font-medium" id="dailyStakedInc">▲ +145 today</div>
 </div>
 <div class="stagger-in glass-card p-4" style="animation-delay: 0.45s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Supply</h3>
@@ -444,13 +470,13 @@
 </div>
 <div class="stagger-in glass-card p-4" style="animation-delay: 0.5s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">24h Volume</h3>
-<div class="text-xl font-bold text-on-surface" id="vol">$182,574</div>
+<div class="text-xl font-bold text-on-surface" id="vol">$182,477</div>
 <div class="text-xs mt-1 font-medium transition-colors duration-500" id="volChg">▲ +2.4%</div>
 </div>
 <div class="stagger-in glass-card p-4" style="animation-delay: 0.55s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Stakers</h3>
 <div class="text-xl font-bold text-on-surface" id="totalStakers">1,249</div>
-<div class="text-[10px] text-secondary">▲ Network High</div>
+<div class="text-[10px] text-secondary" id="stakerTrend">▲ +1 today</div>
 </div>
 <div class="stagger-in glass-card p-4 flex items-center justify-center group cursor-pointer overflow-hidden relative" style="animation-delay: 0.6s;">
 <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -464,10 +490,10 @@
 <div class="stagger-in space-y-4" style="animation-delay: 0.6s;">
 <h2 class="text-lg font-bold flex items-center gap-2 group">
 <span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform">diamond</span>
-                Investment Vaults
-            </h2>
+            Investment Vaults
+        </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-<!-- Tiers 1-4 -->
+<!-- Tiers -->
 <div class="glass-card p-5 tier-card flex flex-col justify-between">
 <div>
 <div class="flex justify-between items-start mb-4">
@@ -572,20 +598,20 @@
 </div>
 <!-- Performance Chart -->
 <div class="stagger-in glass-card p-6" style="animation-delay: 0.7s;">
-<div class="flex items-center justify-between mb-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">monitoring</span>
-                    Price Performance
-                </h2>
-<div class="flex bg-surface-container rounded-full p-1 gap-1">
+                Price Performance
+            </h2>
+<div class="flex bg-surface-container rounded-full p-1 gap-1 self-start md:self-auto">
 <button class="px-4 py-1 rounded-full text-xs font-bold transition-all tab-btn active bg-primary-container text-white" onclick="showChart('line',this)">Line</button>
 <button class="px-4 py-1 rounded-full text-xs font-bold transition-all tab-btn text-on-surface-variant" onclick="showChart('candle',this)">Candle</button>
 </div>
 </div>
-<div class="relative h-64" id="lineChartWrap">
+<div class="relative h-72" id="lineChartWrap">
 <canvas id="priceChart"></canvas>
 </div>
-<div class="relative h-64 hidden" id="candleChartWrap">
+<div class="relative h-72 hidden" id="candleChartWrap">
 <canvas id="candleChart"></canvas>
 </div>
 </div>
@@ -595,8 +621,8 @@
 <div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
 <h2 class="text-xl font-bold text-primary flex items-center gap-2 mb-6">
 <span class="material-symbols-outlined animate-bounce">lock</span>
-                    Active Stake Vault
-                </h2>
+                Active Stake Vault
+            </h2>
 <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
 <div>
 <label class="text-[10px] text-on-surface-variant uppercase font-bold">Locked Amount</label>
@@ -613,7 +639,7 @@
 </div>
 <div class="space-y-4">
 <div class="flex justify-between text-[11px] font-bold text-on-surface-variant uppercase">
-<span class="">Maturity Countdown</span>
+<span>Maturity Countdown</span>
 <span class="text-primary animate-pulse" id="pctLabel">Streaming...</span>
 </div>
 <div class="grid grid-cols-4 gap-2">
@@ -633,7 +659,7 @@
 <div class="p-6 border-b border-outline/20 flex justify-between items-center">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">receipt_long</span>
-                    Live Stream <span class="live-dot"></span>
+                Live Stream <span class="live-dot"></span>
 </h2>
 <span class="text-[10px] text-on-surface-variant font-mono">Real-time Block Data</span>
 </div>
@@ -675,366 +701,354 @@
 </button>
 </div>
 <script>
-        // Particle Background Logic
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const particleCount = 45;
-        const brandColors = ['#9945ff', '#00ec91', '#d8b9ff', '#a0ffc3', '#60a5fa'];
+    // Particle Background Logic with Multi-Layered Depth (Kinetic Depth)
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 80; 
+    const brandColors = ['#9945ff', '#00ec91', '#d8b9ff', '#a0ffc3', '#60a5fa'];
+    
+    class Particle {
+        constructor() { this.init(); }
+        init() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            // Depth layers: 0 is far, 1 is near
+            this.z = Math.random(); 
+            this.size = this.z * 3 + 0.2; // Larger particles are "closer"
+            this.speed = this.z * 0.4 + 0.1; // Faster particles are "closer"
+            this.color = brandColors[Math.floor(Math.random() * brandColors.length)];
+            this.opacity = this.z * 0.5 + 0.05; // Brighter particles are "closer"
+            this.vx = (Math.random() - 0.5) * this.speed * 2;
+            this.vy = (Math.random() - 0.5) * this.speed * 2;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x > canvas.width + 10) this.x = -10;
+            if (this.x < -10) this.x = canvas.width + 10;
+            if (this.y > canvas.height + 10) this.y = -10;
+            if (this.y < -10) this.y = canvas.height + 10;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Sort by depth for correct 3D rendering (optional but nice)
+        particles.sort((a, b) => a.z - b.z);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener('resize', initParticles);
+    initParticles();
+    animateParticles();
+
+    // Liquidity Donut Chart
+    let liquidityDonut;
+    function initLiquidityChart() {
+        const ctxDonut = document.getElementById('liquidityDonutChart').getContext('2d');
+        liquidityDonut = new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['TRX Pair', 'BTC Pair', 'ETH Pair'],
+                datasets: [{
+                    data: [49.8, 33.6, 16.5],
+                    backgroundColor: ['#00ec91', '#9945ff', '#60a5fa'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                cutout: '85%',
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                animation: { animateRotate: true, duration: 2000 }
+            }
+        });
+    }
+
+    // Custom Tooltip for Chart.js
+    const externalTooltipHandler = (context) => {
+        const {chart, tooltip} = context;
+        const tooltipEl = document.getElementById('chartjs-tooltip');
+
+        if (tooltip.opacity === 0) {
+            tooltipEl.style.opacity = 0;
+            return;
+        }
+
+        if (tooltip.body) {
+            const titleLines = tooltip.title || [];
+            const bodyLines = tooltip.body.map(b => b.lines);
+
+            let innerHtml = '<div style="font-family: \'JetBrains Mono\', monospace; font-size: 10px; color: #cec2d8; margin-bottom: 4px;">';
+            titleLines.forEach(title => {
+                innerHtml += title;
+            });
+            innerHtml += '</div>';
+
+            bodyLines.forEach((body, i) => {
+                const colors = tooltip.labelColors[i];
+                innerHtml += `<div style="display: flex; align-items: center; gap: 8px;">`;
+                innerHtml += `<div style="width: 8px; height: 8px; border-radius: 50%; background: ${colors.borderColor || colors.backgroundColor}"></div>`;
+                innerHtml += `<div style="font-weight: bold; color: white;">${body}</div>`;
+                innerHtml += `</div>`;
+            });
+
+            tooltipEl.innerHTML = innerHtml;
+        }
+
+        const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+
+        tooltipEl.style.opacity = 1;
+        tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+        tooltipEl.style.top = positionY + tooltip.caretY - 10 + 'px';
+    };
+
+    // Charts Logic
+    let priceChart, candleChart;
+    const lineLabels = [];
+    const linePrices = [];
+    let p = 0.9992;
+
+    const candleData = [];
+    const now = luxon.DateTime.now();
+    
+    // Initial data generation
+    for (let i = 48; i >= 0; i--) {
+        const time = now.minus({ minutes: i * 30 });
+        lineLabels.push(time.toFormat('HH:mm'));
+        const change = (Math.random() - 0.5) * 0.002;
+        p = parseFloat((p + change).toFixed(4));
+        linePrices.push(p);
         
-        class Particle {
-            constructor() { this.init(); }
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speed = Math.random() * 0.5 + 0.2;
-                this.color = brandColors[Math.floor(Math.random() * brandColors.length)];
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.vx = this.speed * 1.5;
-                this.vy = this.speed;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x > canvas.width) this.x = -10;
-                if (this.y > canvas.height) this.y = -10;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.opacity;
-                ctx.fill();
-            }
-        }
+        const open = p + (Math.random() - 0.5) * 0.001;
+        const close = p;
+        const high = Math.max(open, close) + Math.random() * 0.0015;
+        const low = Math.min(open, close) - Math.random() * 0.0015;
+        candleData.push({ x: time.valueOf(), o: open, h: high, l: low, c: close });
+    }
 
-        function initParticles() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-
-        window.addEventListener('resize', initParticles);
-        initParticles();
-        animateParticles();
-
-        // Custom Tooltip for Chart.js
-        const externalTooltipHandler = (context) => {
-            const {chart, tooltip} = context;
-            const tooltipEl = document.getElementById('chartjs-tooltip');
-
-            if (tooltip.opacity === 0) {
-                tooltipEl.style.opacity = 0;
-                return;
-            }
-
-            if (tooltip.body) {
-                const titleLines = tooltip.title || [];
-                const bodyLines = tooltip.body.map(b => b.lines);
-
-                let innerHtml = '<div style="font-family: \'JetBrains Mono\', monospace; font-size: 10px; color: #cec2d8; margin-bottom: 4px;">';
-                titleLines.forEach(title => {
-                    innerHtml += title;
-                });
-                innerHtml += '</div>';
-
-                bodyLines.forEach((body, i) => {
-                    const colors = tooltip.labelColors[i];
-                    innerHtml += `<div style="display: flex; align-items: center; gap: 8px;">`;
-                    innerHtml += `<div style="width: 8px; height: 8px; border-radius: 50%; background: ${colors.borderColor}"></div>`;
-                    innerHtml += `<div style="font-weight: bold; color: white;">${body}</div>`;
-                    innerHtml += `</div>`;
-                });
-
-                tooltipEl.innerHTML = innerHtml;
-            }
-
-            const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
-
-            tooltipEl.style.opacity = 1;
-            tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-            tooltipEl.style.top = positionY + tooltip.caretY - 10 + 'px';
-        };
-
-        // Charts Logic
-        let priceChart, candleChart;
-        const lineLabels = [];
-        const linePrices = [];
-        let p = 0.9991;
-
-        // Mock data for Line & Candle
-        const candleData = [];
-        const now = luxon.DateTime.now();
-        for (let i = 24; i >= 0; i--) {
-            const time = now.minus({ hours: i });
-            lineLabels.push(time.toFormat('HH:mm'));
-            const change = (Math.random() - 0.5) * 0.0015;
-            p = parseFloat((p + change).toFixed(4));
-            linePrices.push(p);
-            
-            const o = p + (Math.random() - 0.5) * 0.001;
-            const h = Math.max(o, p) + Math.random() * 0.0005;
-            const l = Math.min(o, p) - Math.random() * 0.0005;
-            candleData.push({ x: time.valueOf(), o, h, l, c: p });
-        }
-
-        function initCharts() {
-            // Line Chart
-            const ctxLine = document.getElementById('priceChart').getContext('2d');
-            priceChart = new Chart(ctxLine, {
-                type: 'line',
-                data: {
-                    labels: lineLabels,
-                    datasets: [{
-                        data: linePrices,
-                        borderColor: '#9945ff',
-                        backgroundColor: 'rgba(153, 69, 255, 0.05)',
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        fill: true,
-                        tension: 0.4
-                    }]
+    function initCharts() {
+        const ctxLine = document.getElementById('priceChart').getContext('2d');
+        priceChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: lineLabels,
+                datasets: [{
+                    data: linePrices,
+                    borderColor: '#9945ff',
+                    backgroundColor: 'rgba(153, 69, 255, 0.05)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { enabled: false, external: externalTooltipHandler }
                 },
-                options: {
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            enabled: false,
-                            external: externalTooltipHandler
-                        }
-                    },
-                    scales: {
-                        x: { ticks: { color: '#8b949e', maxTicksLimit: 8 }, grid: { color: 'rgba(76, 67, 85, 0.05)' } },
-                        y: { ticks: { color: '#8b949e' }, grid: { color: 'rgba(76, 67, 85, 0.05)' } }
-                    }
+                scales: {
+                    x: { ticks: { color: '#8b949e', maxTicksLimit: 12 }, grid: { color: 'rgba(76, 67, 85, 0.05)' } },
+                    y: { ticks: { color: '#8b949e' }, grid: { color: 'rgba(76, 67, 85, 0.05)' } }
                 }
-            });
-
-            // Candle Chart
-            const ctxCandle = document.getElementById('candleChart').getContext('2d');
-            candleChart = new Chart(ctxCandle, {
-                type: 'candlestick',
-                data: {
-                    datasets: [{
-                        label: 'USDT.sol Price',
-                        data: candleData,
-                        color: {
-                            up: '#00ec91',
-                            down: '#ff4d4d',
-                            unchanged: '#9945ff',
-                        },
-                        borderColor: {
-                            up: '#00ec91',
-                            down: '#ff4d4d',
-                            unchanged: '#9945ff',
-                        }
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            enabled: false,
-                            external: externalTooltipHandler
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: { unit: 'hour' },
-                            ticks: { color: '#8b949e' },
-                            grid: { color: 'rgba(76, 67, 85, 0.05)' }
-                        },
-                        y: {
-                            ticks: { color: '#8b949e' },
-                            grid: { color: 'rgba(76, 67, 85, 0.05)' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function showChart(type, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('active', 'bg-primary-container', 'text-white');
-                b.classList.add('text-on-surface-variant');
-            });
-            btn.classList.add('active', 'bg-primary-container', 'text-white');
-            document.getElementById('lineChartWrap').classList.toggle('hidden', type !== 'line');
-            document.getElementById('candleChartWrap').classList.toggle('hidden', type !== 'candle');
-            if (type === 'candle') candleChart.update();
-        }
-
-        // Wallet & Staking
-        async function connectWallet() {
-            const btn = document.getElementById('connectBtn');
-            btn.textContent = '...';
-            setTimeout(() => {
-                document.getElementById('connectPrompt').classList.add('hidden');
-                document.getElementById('walletBar').classList.remove('hidden');
-                document.getElementById('stakeSection').classList.remove('hidden');
-                btn.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary">check_circle</span> T1aX...9K2`;
-                btn.classList.remove('pulse-glow');
-                btn.classList.add('bg-surface', 'border', 'border-outline/50');
-                startCountdown();
-            }, 1000);
-        }
-
-        function startCountdown() {
-            const totalSecs = 180 * 24 * 3600;
-            let current = 15552000 * 0.65; 
-            setInterval(() => {
-                current += 1;
-                const pct = (current / totalSecs) * 100;
-                document.getElementById('stakeBar').style.width = pct.toFixed(2) + '%';
-                document.getElementById('pctLabel').textContent = pct.toFixed(1) + '%';
-                document.getElementById('cdDays').textContent = Math.floor((totalSecs - current) / 86400);
-            }, 1000);
-        }
-
-        function updateProjection(slider, rate, targetId) {
-            const val = parseInt(slider.value);
-            const tierNum = targetId.replace('yield', '');
-            document.getElementById('yieldAmt' + tierNum).textContent = '$' + val.toLocaleString();
-            let durationFactor = tierNum === '1' ? 0.25 : tierNum === '2' ? 0.5 : tierNum === '3' ? 0.75 : 1;
-            const reward = val * rate * durationFactor;
-            document.getElementById(targetId || ('yield' + tierNum)).textContent = '$' + (val + reward).toLocaleString();
-            if (document.getElementById('payout' + tierNum)) {
-                document.getElementById('payout' + tierNum).textContent = '$' + (val + reward).toLocaleString();
             }
-        }
-
-        // Live Market Data Updates (Liquidity & Vol)
-        function updateLiveMarket() {
-            // Update 24h Volume and Volume Change
-            const volEl = document.getElementById('vol');
-            const volChgEl = document.getElementById('volChg');
-            let currentVol = parseInt(volEl.textContent.replace(/[$,]/g, ''));
-            currentVol += (Math.random() - 0.4) * 250; // Bias toward growth
-            volEl.textContent = '$' + Math.max(150000, currentVol).toLocaleString(undefined, {maximumFractionDigits: 0});
-            
-            // Fluctuating Vol Change %
-            let currentVolPct = parseFloat(volChgEl.textContent.replace(/[▲▼ %+]/g, ''));
-            let volDiff = (Math.random() - 0.48) * 0.2;
-            let newVolPct = (currentVolPct + volDiff).toFixed(1);
-            const volSign = newVolPct >= 0 ? '▲ +' : '▼ ';
-            volChgEl.textContent = `${volSign}${Math.abs(newVolPct)}%`;
-            volChgEl.className = `text-xs mt-1 font-medium transition-colors duration-500 ${newVolPct >= 0 ? 'text-secondary' : 'text-red-400'}`;
-
-            volEl.classList.add('data-pulse');
-            setTimeout(() => volEl.classList.remove('data-pulse'), 1000);
-
-            // Update Liquidity Pairs
-            const trxLiq = document.getElementById('vLiqTRXVal');
-            const btcLiq = document.getElementById('vLiqBTCVal');
-            const ethLiq = document.getElementById('vLiqETHVal');
-            const totalLiq = document.getElementById('visualTotalLiq');
-            const mainTotalLiq = document.getElementById('totalLiq');
-            const totalLiqChg = document.getElementById('totalLiqChg');
-
-            const fluctuate = (valStr) => {
-                let v = parseFloat(valStr.replace(/[$,M]/g, ''));
-                v += (Math.random() - 0.5) * 0.01;
-                return '$' + v.toFixed(2) + 'M';
-            };
-
-            trxLiq.textContent = fluctuate(trxLiq.textContent);
-            btcLiq.textContent = fluctuate(btcLiq.textContent);
-            ethLiq.textContent = fluctuate(ethLiq.textContent);
-
-            let agg = (parseFloat(trxLiq.textContent.replace(/[$,M]/g, '')) + 
-                       parseFloat(btcLiq.textContent.replace(/[$,M]/g, '')) + 
-                       parseFloat(ethLiq.textContent.replace(/[$,M]/g, ''))) * 1000000;
-            
-            totalLiq.textContent = '$' + agg.toLocaleString(undefined, {maximumFractionDigits: 0});
-            mainTotalLiq.textContent = totalLiq.textContent;
-
-            // Fluctuating Total Liquidity Change %
-            let currentLiqPct = parseFloat(totalLiqChg.textContent.replace(/[▲▼ %+]/g, ''));
-            let liqDiff = (Math.random() - 0.5) * 0.05;
-            let newLiqPct = (currentLiqPct + liqDiff).toFixed(1);
-            const liqSign = newLiqPct >= 0 ? '▲ +' : '▼ ';
-            totalLiqChg.textContent = `${liqSign}${Math.abs(newLiqPct)}%`;
-            totalLiqChg.className = `text-xs mt-1 font-medium transition-colors duration-500 ${newLiqPct >= 0 ? 'text-secondary' : 'text-red-400'}`;
-        }
-
-        // Live TX Stream Mock
-        function addTxRow() {
-            const tbody = document.getElementById('txBody');
-            const hash = Math.random().toString(36).substring(2, 8).toUpperCase() + '...';
-            const types = ['Swap', 'Stake', 'Liquidate', 'Transfer'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            const vol = (Math.random() * 50000 + 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
-            
-            // Exactly 7% failure rate as requested
-            const isFailed = Math.random() < 0.07;
-            
-            const statusHtml = isFailed 
-                ? `<span class="text-error flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-error"></span>Failed</span>`
-                : `<span class="text-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Confirmed</span>`;
-
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-primary/5 transition-colors group';
-            row.innerHTML = `
-                <td class="px-6 py-4 text-primary">${hash}</td>
-                <td class="px-6 py-4 text-on-surface-variant">${type}</td>
-                <td class="px-6 py-4 text-right font-bold text-on-surface">${vol} USDT</td>
-                <td class="px-6 py-4 text-on-surface-variant">Just now</td>
-                <td class="px-6 py-4">${statusHtml}</td>
-            `;
-            tbody.prepend(row);
-            if (tbody.children.length > 8) tbody.removeChild(tbody.lastChild);
-        }
-
-        window.addEventListener('load', () => {
-            initCharts();
-            initLiquidityChart();
-            for(let i=0; i<3; i++) addTxRow();
-            
-            // Intervals
-            setInterval(addTxRow, 4800); // New TX every 4.8s
-            setInterval(updateLiveMarket, 4000); // Live Data Frequency: every 4 seconds
         });
 
-        let liqChart;
-        function initLiquidityChart() {
-            const ctx = document.getElementById('liquidityDonutChart').getContext('2d');
-            liqChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['TRX Pair', 'BTC Pair', 'ETH Pair'],
-                    datasets: [{
-                        data: [2410000, 1620000, 790000],
-                        backgroundColor: ['#00ec91', '#9945ff', '#60a5fa'],
-                        borderWidth: 0,
-                        hoverOffset: 12,
-                        borderRadius: 5
-                    }]
+        const ctxCandle = document.getElementById('candleChart').getContext('2d');
+        candleChart = new Chart(ctxCandle, {
+            type: 'candlestick',
+            data: {
+                datasets: [{
+                    label: 'USDT.sol Price',
+                    data: candleData,
+                    color: { up: '#00ec91', down: '#ff4d4d', unchanged: '#9945ff' },
+                    borderColor: { up: '#00ec91', down: '#ff4d4d', unchanged: '#9945ff' }
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { enabled: false, external: externalTooltipHandler }
                 },
-                options: {
-                    cutout: '85%',
-                    plugins: { legend: { display: false } },
-                    maintainAspectRatio: false
+                scales: {
+                    x: { type: 'time', time: { unit: 'hour' }, ticks: { color: '#8b949e' }, grid: { color: 'rgba(76, 67, 85, 0.05)' } },
+                    y: { ticks: { color: '#8b949e' }, grid: { color: 'rgba(76, 67, 85, 0.05)' } }
                 }
+            }
+        });
+    }
+
+    function showChart(type, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.remove('active', 'bg-primary-container', 'text-white');
+            b.classList.add('text-on-surface-variant');
+        });
+        btn.classList.add('active', 'bg-primary-container', 'text-white');
+        
+        const lineWrap = document.getElementById('lineChartWrap');
+        const candleWrap = document.getElementById('candleChartWrap');
+        
+        if (type === 'line') {
+            lineWrap.classList.remove('hidden');
+            candleWrap.classList.add('hidden');
+            priceChart.resize();
+            priceChart.update();
+        } else {
+            lineWrap.classList.add('hidden');
+            candleWrap.classList.remove('hidden');
+            candleChart.resize();
+            candleChart.update();
+        }
+    }
+
+    // Synchronize price updates to both charts
+    function syncPriceUpdate(newVal) {
+        const timestamp = Date.now();
+        
+        // Update Line Chart
+        lineLabels.shift();
+        lineLabels.push(luxon.DateTime.now().toFormat('HH:mm'));
+        linePrices.shift();
+        linePrices.push(newVal);
+        priceChart.update('none');
+
+        // Update Candle Chart (last candle)
+        const lastCandle = candleData[candleData.length - 1];
+        lastCandle.c = newVal;
+        if (newVal > lastCandle.h) lastCandle.h = newVal;
+        if (newVal < lastCandle.l) lastCandle.l = newVal;
+        
+        // Every 30 updates, simulate a new candle period for visual continuity
+        if (Math.random() < 0.05) {
+            candleData.shift();
+            const newCandle = { x: timestamp, o: newVal, h: newVal, l: newVal, c: newVal };
+            candleData.push(newCandle);
+        }
+        candleChart.update('none');
+    }
+
+    // Wallet & Staking logic
+    async function connectWallet() {
+        const btn = document.getElementById('connectBtn');
+        btn.textContent = '...';
+        setTimeout(() => {
+            document.getElementById('connectPrompt').classList.add('hidden');
+            document.getElementById('walletBar').classList.remove('hidden');
+            document.getElementById('stakeSection').classList.remove('hidden');
+            const mockAddr = 'T' + Array.from({length: 33}, () => '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'[Math.floor(Math.random() * 58)]).join('');
+            const displayAddr = mockAddr.substring(0, 5) + '...' + mockAddr.slice(-4);
+            document.getElementById('walletAddr').textContent = displayAddr;
+            btn.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary">check_circle</span> ${displayAddr}`;
+            btn.classList.remove('pulse-glow');
+            btn.classList.add('bg-surface', 'border', 'border-outline/50');
+            startCountdown();
+        }, 1000);
+    }
+
+    function startCountdown() {
+        const totalSecs = 180 * 24 * 3600;
+        let current = totalSecs * 0.65; 
+        setInterval(() => {
+            current += 1;
+            const pct = (current / totalSecs) * 100;
+            document.getElementById('stakeBar').style.width = pct.toFixed(2) + '%';
+            document.getElementById('pctLabel').textContent = pct.toFixed(1) + '%';
+            const remaining = totalSecs - current;
+            document.getElementById('cdDays').textContent = Math.floor(remaining / 86400);
+            document.getElementById('cdHours').textContent = Math.floor((remaining % 86400) / 3600);
+            document.getElementById('cdMins').textContent = Math.floor((remaining % 3600) / 60);
+            document.getElementById('cdSecs').textContent = Math.floor(remaining % 60);
+        }, 1000);
+    }
+
+    function updateProjection(slider, rate, targetId) {
+        const val = parseInt(slider.value);
+        const tierNum = targetId.replace('yield', '');
+        document.getElementById('yieldAmt' + tierNum).textContent = '$' + val.toLocaleString();
+        let durationFactor = tierNum === '1' ? 0.25 : tierNum === '2' ? 0.5 : tierNum === '3' ? 0.75 : 1;
+        const reward = val * rate * durationFactor;
+        document.getElementById(targetId || ('yield' + tierNum)).textContent = '$' + (val + reward).toLocaleString();
+        if (document.getElementById('payout' + tierNum)) {
+            document.getElementById('payout' + tierNum).textContent = '$' + (val + reward).toLocaleString(undefined, { minimumFractionDigits: 2 });
+        }
+    }
+
+    // High Performance Live Metrics: Micro-fluctuations
+    function updateLiveMarket() {
+        const mainPrice = document.getElementById('mainPrice');
+        let pVal = parseFloat(mainPrice.textContent.replace('$', ''));
+        const priceFluctuation = (Math.random() - 0.5) * 0.0006;
+        pVal += priceFluctuation;
+        mainPrice.textContent = '$' + pVal.toFixed(4);
+
+        // Sync price to charts
+        syncPriceUpdate(pVal);
+
+        // Accelerate update frequency for volume and liquidity
+        const totalLiqEl = document.getElementById('totalLiq');
+        const visualTotalLiqEl = document.getElementById('visualTotalLiq');
+        const volEl = document.getElementById('vol');
+        
+        let liqValue = parseInt(totalLiqEl.textContent.replace(/[$,]/g, ''));
+        let volValue = parseInt(volEl.textContent.replace(/[$,]/g, ''));
+
+        // High frequency fluctuations
+        liqValue += Math.floor((Math.random() - 0.45) * 800); 
+        volValue += Math.floor((Math.random() - 0.48) * 300); 
+
+        totalLiqEl.textContent = '$' + liqValue.toLocaleString();
+        visualTotalLiqEl.textContent = totalLiqEl.textContent;
+        volEl.textContent = '$' + volValue.toLocaleString();
+
+        // Data Pulse Visual
+        if (Math.random() < 0.2) {
+            [totalLiqEl, volEl].forEach(el => {
+                el.classList.add('data-pulse');
+                setTimeout(() => el.classList.remove('data-pulse'), 800);
             });
         }
-    </script>
-</body></html>
+    }
+
+    // Live TX Stream with realism
+    function addTxRow() {
+        const tbody = document.getElementById('txBody');
+        const charset = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        const genTronHash = () => 'T' + Array.from({length: 4}, () => charset[Math.floor(Math.random() * charset.length)]).join('') + '...';
+        
+        const hash = genTronHash();
+        const types = ['Swap', 'Stake', 'Unstake', 'Transfer'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        const vol = (Math.random() * 12000 + 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        
+        // 7% failure rate for realism as requested
+        const isFailed = Math.random() < 0.07;
+        const statusHtml = isFailed 
+            ? `<span class="text-error-tx flex items-center gap-1 font-bold"><span class="w-1.5 h-1.5 rounded-full bg-error-tx"></span>✗ Failed</span>`
+            : `<span class="text-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Confirmed</span>`;
+
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-primary/5 transition-colors group opacity-0 translate-x-4 transition-all duration-500';
+        row.innerHTML = `
+            <td class="px-6 py-4 text-primary font-bold">${hash}</td>
+            <td class="px-6 py-4 text-on-surface</script></body></html>
