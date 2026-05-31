@@ -6,228 +6,303 @@
 <title>USDT.sol | Kinetic Velocity</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Financial Chart Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.1.1/dist/chartjs-chart-financial.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
-    @import url('https://fonts.cdnfonts.com/css/geist');
+        @import url('https://fonts.cdnfonts.com/css/geist');
 
-    :root {
-      --primary: #d8b9ff;
-      --secondary: #a0ffc3;
-      --background: #0e0e0e;
-      --surface: #131313;
-      --outline: #4c4355;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--background);
-      color: #e5e2e1;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    h1, h2, h3, .font-geist {
-      font-family: 'Geist', sans-serif;
-    }
-
-    .glass-card {
-      background: rgba(20, 20, 20, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(153, 69, 255, 0.15);
-      border-radius: 0.5rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .glass-card:hover {
-      border-color: rgba(153, 69, 255, 0.4);
-      box-shadow: 0 0 20px rgba(153, 69, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .kinetic-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: radial-gradient(circle at 20% 30%, rgba(153, 69, 255, 0.15) 0%, transparent 40%),
-                  radial-gradient(circle at 80% 70%, rgba(0, 243, 145, 0.1) 0%, transparent 40%);
-      animation: ambientMove 20s infinite alternate;
-    }
-
-    @keyframes ambientMove {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.1) translate(2%, 2%); }
-    }
-
-    .shimmer-progress {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .shimmer-progress::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 200%; }
-    }
-
-    .pulse-glow {
-      animation: pulseGlow 2s infinite;
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.5); }
-      50% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.8); }
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #00ec91;
-      display: inline-block;
-      animation: blink 1.2s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.8); }
-    }
-
-    .stagger-in {
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .data-pulse {
-        animation: dataPulse 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes dataPulse {
-        0% { transform: scale(1); filter: brightness(1); }
-        50% { transform: scale(1.05); filter: brightness(1.4); color: #fff; }
-        100% { transform: scale(1); filter: brightness(1); }
-    }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--background); }
-    ::-webkit-scrollbar-thumb { background: var(--outline); border-radius: 10px; }
-
-    .bottom-nav {
-      background: rgba(14, 14, 14, 0.9);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid var(--outline);
-    }
-    
-    .tier-card {
-        transition: all 0.3s ease;
-        position: relative;
-    }
-    .tier-card:hover {
-        background: rgba(153, 69, 255, 0.05);
-    }
-    
-    input[type=range] {
-      -webkit-appearance: none;
-      background: transparent;
-    }
-    input[type=range]::-webkit-slider-runnable-track {
-      height: 4px;
-      background: #4c4355;
-      border-radius: 2px;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 16px;
-      width: 16px;
-      border-radius: 50%;
-      background: #d8b9ff;
-      margin-top: -6px;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
-    }
-
-    .neon-glow-primary {
-      filter: drop-shadow(0 0 8px rgba(153, 69, 255, 0.6));
-    }
-    .neon-glow-secondary {
-      filter: drop-shadow(0 0 8px rgba(0, 243, 145, 0.6));
-    }
-    
-    .liquidity-orb {
-      position: relative;
-      background: radial-gradient(circle at center, var(--surface) 0%, transparent 70%);
-    }
-    
-    .chart-container-inner {
-      filter: drop-shadow(0 0 15px rgba(153, 69, 255, 0.1));
-    }
-  </style>
-<script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#d8b9ff",
-            "primary-container": "#9945ff",
-            "secondary": "#a0ffc3",
-            "secondary-container": "#00ec91",
-            "surface": "#131313",
-            "surface-container": "#201f1f",
-            "outline": "#4c4355",
-            "on-surface": "#e5e2e1",
-            "on-surface-variant": "#cec2d8"
-          },
-          borderRadius: {
-            "DEFAULT": "0.125rem",
-            "lg": "0.25rem",
-            "xl": "0.5rem",
-            "full": "0.75rem"
-          }
+        :root {
+            --primary: #d8b9ff;
+            --primary-container: #9945ff;
+            --secondary: #a0ffc3;
+            --secondary-container: #00ec91;
+            --background: #131313;
+            --surface: #131313;
+            --outline: #4c4355;
         }
-      }
-    }
-  </script>
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e0e0e;
+            color: #e5e2e1;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .font-geist {
+            font-family: 'Geist', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(153, 69, 255, 0.1);
+            border-radius: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(153, 69, 255, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(153, 69, 255, 0.2);
+            transform: translateY(-4px) scale(1.005);
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: #0e0e0e;
+        }
+
+        .kinetic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(153, 69, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 236, 145, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* Kinetic Entrance Animations */
+        @keyframes fadeInUpStagger {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.98); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .stagger-in {
+            opacity: 0;
+            animation: fadeInUpStagger 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .stagger-in {
+                animation: none;
+                opacity: 1;
+            }
+            .kinetic-bg {
+                animation: none;
+            }
+        }
+
+        /* Pulse & Glow Effects */
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #00ec91;
+            display: inline-block;
+            box-shadow: 0 0 10px #00ec91;
+            animation: blinkPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        @keyframes blinkPulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px #00ec91; }
+            50% { opacity: 0.4; transform: scale(0.8); box-shadow: 0 0 2px #00ec91; }
+        }
+
+        .pulse-glow {
+            position: relative;
+        }
+        .pulse-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: var(--primary-container);
+            opacity: 0.3;
+            filter: blur(8px);
+            z-index: -1;
+            animation: pulseGlowAnim 3s infinite;
+        }
+
+        @keyframes pulseGlowAnim {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+
+        /* Slider Interactions */
+        input[type=range].projection-slider {
+            -webkit-appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type=range].projection-slider::-webkit-slider-runnable-track {
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        input[type=range].projection-slider:hover::-webkit-slider-runnable-track {
+            background: #353534;
+        }
+        input[type=range].projection-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #d8b9ff;
+            margin-top: -7px;
+            box-shadow: 0 0 15px rgba(153, 69, 255, 0.5);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        input[type=range].projection-slider:active::-webkit-slider-thumb {
+            transform: scale(1.3);
+            box-shadow: 0 0 25px rgba(153, 69, 255, 0.8);
+            background: #fff;
+        }
+
+        /* Progress Shimmer */
+        .shimmer-progress {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2.5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .data-pulse {
+            animation: dataPulseEffect 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes dataPulseEffect {
+            0% { transform: scale(1); color: inherit; }
+            30% { transform: scale(1.1); color: #fff; filter: brightness(1.5); }
+            100% { transform: scale(1); color: inherit; }
+        }
+
+        /* Scrollbar Style */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; }
+        ::-webkit-scrollbar-thumb { background: #353534; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4c4355; }
+
+        .tier-card button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tier-card:hover button:not(.bg-primary-container) {
+            background: #2a2a2a;
+            color: var(--primary);
+        }
+
+        .bottom-nav {
+            background: rgba(14, 14, 14, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(76, 67, 85, 0.3);
+        }
+        
+        .nav-item-active {
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px rgba(153, 69, 255, 0.4));
+        }
+
+        /* Tooltip Overrides */
+        #chartjs-tooltip {
+            opacity: 0;
+            position: absolute;
+            background: rgba(20, 20, 20, 0.95);
+            color: white;
+            border: 1px solid rgba(216, 185, 255, 0.3);
+            border-radius: 4px;
+            pointer-events: none;
+            transition: all .1s ease;
+            transform: translate(-50%, 0);
+            z-index: 100;
+            padding: 8px 12px;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d8b9ff",
+                        "primary-container": "#9945ff",
+                        "secondary": "#a0ffc3",
+                        "secondary-container": "#00ec91",
+                        "surface": "#131313",
+                        "surface-container": "#201f1f",
+                        "outline": "#4c4355",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#cec2d8",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body class="pb-24">
+<canvas id="particleCanvas"></canvas>
 <div class="kinetic-bg"></div>
-<nav class="sticky top-0 z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-[#4c4355] px-4 py-3 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<div class="w-10 h-10 bg-gradient-to-br from-primary-container to-secondary-container rounded-lg flex items-center justify-center text-white text-xl shadow-lg shadow-primary-container/20">
+<div id="chartjs-tooltip"></div>
+<!-- Navigation -->
+<nav class="sticky top-0 z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-outline/20 px-4 py-3 flex items-center justify-between transition-colors duration-500">
+<div class="flex items-center gap-2 group cursor-pointer">
+<div class="w-10 h-10 bg-gradient-to-br from-primary-container to-secondary-container rounded-lg flex items-center justify-center text-white text-xl shadow-lg shadow-primary-container/20 group-hover:scale-110 transition-transform duration-300">
 <span class="material-symbols-outlined">payments</span>
 </div>
 <div>
-<h1 class="text-lg font-bold leading-none text-on-surface">USDT.sol</h1>
+<h1 class="text-lg font-bold leading-none text-on-surface group-hover:text-primary transition-colors">USDT.sol</h1>
 <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-medium">TRC-20 STABLECOIN</span>
 </div>
 </div>
-<button class="pulse-glow bg-primary-container hover:bg-primary text-on-primary-container px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 active:scale-95 shadow-lg shadow-primary-container/30" id="connectBtn" onclick="connectWallet()">
+<div class="flex items-center gap-3">
+<button class="pulse-glow bg-primary-container hover:bg-primary text-on-primary-container px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 active:scale-90 shadow-lg shadow-primary-container/30" id="connectBtn" onclick="connectWallet()">
 <span class="material-symbols-outlined text-sm">link</span>
-    Connect
-  </button>
+                Connect
+            </button>
+</div>
 </nav>
 <main class="max-w-5xl mx-auto p-4 space-y-6">
+<!-- Onboarding Prompt (Prioritized at Top) -->
+<div class="stagger-in glass-card p-6 md:p-10 text-center flex flex-col items-center gap-4 border-dashed border-2 border-outline/30 hover:border-primary/50 transition-all" id="connectPrompt" style="animation-delay: 0.1s;">
+<div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center text-on-surface-variant mb-2 group cursor-pointer">
+<span class="material-symbols-outlined text-4xl group-hover:scale-125 group-hover:text-secondary transition-all">account_balance_wallet</span>
+</div>
+<div>
+<h2 class="text-xl font-bold">Secure Access Required</h2>
+<p class="text-sm text-on-surface-variant max-w-xs mx-auto mt-2">Authorize your TronLink wallet to view your personal staking portfolio and live reward distributions.</p>
+</div>
+<button class="bg-secondary-container hover:bg-secondary text-surface px-8 py-3 rounded-full text-sm font-black transition-all active:scale-95 shadow-lg shadow-secondary-container/20 hover:shadow-secondary-container/40" onclick="connectWallet()">
+                CONNECT TRONLINK
+            </button>
+</div>
+<!-- Wallet Bar (Hidden by default) -->
 <div class="hidden stagger-in glass-card p-4 flex flex-col gap-4 border-l-4 border-l-secondary-container" id="walletBar">
 <div class="flex items-center justify-between">
 <div class="flex items-center gap-3">
@@ -237,11 +312,11 @@
 <div class="text-xs text-on-surface-variant uppercase tracking-tighter">Live Connection</div>
 </div>
 <div class="grid grid-cols-2 gap-3">
-<div class="bg-surface-container p-3 rounded-xl">
+<div class="bg-surface-container p-3 rounded-xl hover:bg-surface-container-high transition-colors">
 <p class="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Available Balance</p>
 <p class="text-xl font-bold text-on-surface" id="walletBal">— USDT.sol</p>
 </div>
-<div class="bg-surface-container p-3 rounded-xl border border-secondary-container/20">
+<div class="bg-surface-container p-3 rounded-xl border border-secondary-container/20 hover:border-secondary-container/40 transition-colors">
 <p class="text-[10px] text-secondary uppercase font-bold mb-1">Total Staked</p>
 <p class="text-xl font-bold text-secondary" id="wStaked">—</p>
 </div>
@@ -258,8 +333,37 @@
 </div>
 <div class="text-[10px] text-center text-on-surface-variant/60 font-mono" id="wUnlock">—</div>
 </div>
-<!-- Updated Liquidity Visualization Section -->
-<div class="stagger-in glass-card overflow-hidden" id="liquidityVisualSection">
+<!-- Quick Actions & Price Display -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-in" style="animation-delay: 0.2s;">
+<div class="glass-card p-6 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="text-center md:text-left">
+<h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-1 tracking-widest">Market Price</h3>
+<div class="flex items-baseline gap-2">
+<div class="text-4xl font-bold text-on-surface font-geist" id="mainPrice">$0.9991</div>
+<div class="text-sm font-medium text-red-400" id="mainPriceChange">▼ -0.088%</div>
+</div>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-8 py-3 bg-secondary-container text-surface font-black rounded-lg hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-secondary-container/10">BUY</button>
+<button class="flex-1 md:flex-none px-8 py-3 bg-surface-container border border-outline/30 text-on-surface font-black rounded-lg hover:bg-surface-container-high active:scale-95 transition-all">SELL</button>
+</div>
+</div>
+<div class="glass-card p-6 flex flex-col justify-center">
+<h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest text-center">Liquidity Status</h3>
+<div class="flex items-center justify-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#00ec91]"></div>
+<span class="text-xs font-mono">Stable</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#9945ff]"></div>
+<span class="text-xs font-mono">Deep</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Ecosystem Dynamics -->
+<div class="stagger-in glass-card overflow-hidden" id="liquidityVisualSection" style="animation-delay: 0.3s;">
 <div class="p-6 border-b border-outline/10 flex justify-between items-end">
 <div>
 <h2 class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-1">Ecosystem Dynamics</h2>
@@ -271,19 +375,17 @@
 </div>
 </div>
 <div class="p-6 lg:p-10 flex flex-col md:flex-row items-center justify-center gap-10 min-h-[400px]">
-<!-- High-fidelity Donut Chart -->
-<div class="relative w-64 h-64 chart-container-inner">
+<div class="relative w-64 h-64 transition-transform duration-700 hover:scale-105">
 <canvas id="liquidityDonutChart"></canvas>
 <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
 <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Aggregate</span>
 <span class="text-xl font-bold text-on-surface font-geist">100%</span>
 </div>
 </div>
-<!-- Interactive Legend -->
 <div class="flex flex-col gap-4 w-full md:w-auto min-w-[240px]">
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-secondary/5 transition-colors cursor-default">
+<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-secondary/5 transition-all cursor-default hover:translate-x-2">
 <div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,243,145,0.4)]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,243,145,0.4)] group-hover:scale-125 transition-transform"></div>
 <div>
 <div class="text-xs font-bold text-on-surface">TRX Pair</div>
 <div class="text-[10px] text-on-surface-variant uppercase">Tron Network</div>
@@ -294,9 +396,9 @@
 <div class="text-[9px] text-on-surface-variant" id="vLiqTRXVal">$2.41M</div>
 </div>
 </div>
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-primary/5 transition-colors cursor-default">
+<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-primary/5 transition-all cursor-default hover:translate-x-2">
 <div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(153,69,255,0.4)]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(153,69,255,0.4)] group-hover:scale-125 transition-transform"></div>
 <div>
 <div class="text-xs font-bold text-on-surface">BTC Pair</div>
 <div class="text-[10px] text-on-surface-variant uppercase">Bitcoin Bridge</div>
@@ -307,9 +409,9 @@
 <div class="text-[9px] text-on-surface-variant" id="vLiqBTCVal">$1.62M</div>
 </div>
 </div>
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-blue-400/5 transition-colors cursor-default">
+<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-blue-400/5 transition-all cursor-default hover:translate-x-2">
 <div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.4)]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.4)] group-hover:scale-125 transition-transform"></div>
 <div>
 <div class="text-xs font-bold text-on-surface">ETH Pair</div>
 <div class="text-[10px] text-on-surface-variant uppercase">Ethereum Bridge</div>
@@ -320,68 +422,52 @@
 <div class="text-[9px] text-on-surface-variant" id="vLiqETHVal">$0.79M</div>
 </div>
 </div>
-<div class="mt-2 flex justify-center md:justify-start gap-4 px-2">
-<div class="flex items-center gap-2">
-<div class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></div>
-<span class="text-[10px] font-mono text-on-surface-variant">0.032s lat</span>
-</div>
-<div class="flex items-center gap-2">
-<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
-<span class="text-[10px] font-mono text-on-surface-variant">Synced</span>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="stagger-in glass-card p-6 relative overflow-hidden group" style="animation-delay: 0.1s;">
-<div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-<span class="material-symbols-outlined text-8xl text-primary">speed</span>
-</div>
-<h2 class="text-2xl font-bold mb-2">Network Liquidity Stream</h2>
-<div class="flex items-center gap-2 font-mono text-[11px] text-primary/80 bg-primary/5 p-2 rounded-lg border border-primary/10 w-fit">
-<span class="material-symbols-outlined text-sm">terminal</span>
-<span class="" id="contractAddr">TWLCtVFZqfzWS2W1qEfEHPYSoymqbq3qBE</span>
-</div>
-</div>
+<!-- Key Stats Grid -->
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-<div class="stagger-in glass-card p-4" style="animation-delay: 0.2s;">
-<h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Live Price</h3>
-<div class="text-2xl font-bold text-secondary font-geist" id="price">$0.9991</div>
-<div class="text-xs mt-1 font-medium text-red-400" id="priceChange">▼ -0.088%</div>
-</div>
-<div class="stagger-in glass-card p-4" style="animation-delay: 0.25s;">
+<div class="stagger-in glass-card p-4 hover:border-primary/30" style="animation-delay: 0.35s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Liquidity</h3>
 <div class="text-2xl font-bold text-on-surface font-geist" id="totalLiq">$4,821,265</div>
-<div class="text-xs mt-1 text-secondary font-medium" id="totalLiqChg">▲ +1.2%</div>
+<div class="text-xs mt-1 font-medium transition-colors duration-500" id="totalLiqChg">▲ +1.2%</div>
 </div>
-<div class="stagger-in glass-card p-4 transition-all" id="totalStakedCard" style="animation-delay: 0.3s;">
+<div class="stagger-in glass-card p-4 transition-all" id="totalStakedCard" style="animation-delay: 0.4s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Staked</h3>
-<div class="text-2xl font-bold text-primary font-geist data-pulse" id="totalStakedAll">8,436,216</div>
+<div class="text-2xl font-bold text-primary font-geist" id="totalStakedAll">8,436,216</div>
 <div class="text-xs mt-1 text-secondary font-medium">▲ +3,200 today</div>
 </div>
-<div class="stagger-in glass-card p-4" style="animation-delay: 0.35s;">
+<div class="stagger-in glass-card p-4" style="animation-delay: 0.45s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Supply</h3>
 <div class="text-xl font-bold text-on-surface">30,000,000</div>
 <div class="text-[10px] text-on-surface-variant">USDT.sol</div>
 </div>
-<div class="stagger-in glass-card p-4" style="animation-delay: 0.4s;">
+<div class="stagger-in glass-card p-4" style="animation-delay: 0.5s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">24h Volume</h3>
 <div class="text-xl font-bold text-on-surface" id="vol">$182,574</div>
-<div class="text-[10px] text-on-surface-variant">24h Volume</div>
+<div class="text-xs mt-1 font-medium transition-colors duration-500" id="volChg">▲ +2.4%</div>
 </div>
-<div class="stagger-in glass-card p-4" style="animation-delay: 0.45s;">
+<div class="stagger-in glass-card p-4" style="animation-delay: 0.55s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Stakers</h3>
 <div class="text-xl font-bold text-on-surface" id="totalStakers">1,249</div>
-<div class="text-[10px] text-secondary">▲ Active</div>
+<div class="text-[10px] text-secondary">▲ Network High</div>
+</div>
+<div class="stagger-in glass-card p-4 flex items-center justify-center group cursor-pointer overflow-hidden relative" style="animation-delay: 0.6s;">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="text-center z-10">
+<span class="material-symbols-outlined text-primary mb-1">rocket_launch</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Launch Pad</p>
 </div>
 </div>
-<div class="stagger-in space-y-4" style="animation-delay: 0.5s;">
-<h2 class="text-lg font-bold flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">diamond</span>
-        Investment Vaults
-    </h2>
+</div>
+<!-- Investment Vaults -->
+<div class="stagger-in space-y-4" style="animation-delay: 0.6s;">
+<h2 class="text-lg font-bold flex items-center gap-2 group">
+<span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform">diamond</span>
+                Investment Vaults
+            </h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-<!-- Tier 1: 3 Month -->
+<!-- Tiers 1-4 -->
 <div class="glass-card p-5 tier-card flex flex-col justify-between">
 <div>
 <div class="flex justify-between items-start mb-4">
@@ -401,19 +487,12 @@
 </div>
 <div class="pt-4 border-t border-outline/10">
 <div class="mb-4">
-<p class="text-[9px] text-on-surface-variant uppercase mb-1">Total Estimated Payout</p>
+<p class="text-[9px] text-on-surface-variant uppercase mb-1">Estimated Payout</p>
 <p class="text-base font-bold text-primary font-mono" id="payout1">$10,037.50</p>
 </div>
-<div class="flex justify-between items-end">
-<div>
-<p class="text-[9px] text-on-surface-variant uppercase">Est. 3m Reward</p>
-<p class="text-xl font-bold text-secondary font-geist" id="yield1">$37.50</p>
-</div>
-<button class="px-4 py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary-container transition-colors">Stake</button>
+<button class="w-full py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-surface transition-all active:scale-95">Stake</button>
 </div>
 </div>
-</div>
-<!-- Tier 2: 6 Month -->
 <div class="glass-card p-5 tier-card flex flex-col justify-between">
 <div>
 <div class="flex justify-between items-start mb-4">
@@ -433,24 +512,17 @@
 </div>
 <div class="pt-4 border-t border-outline/10">
 <div class="mb-4">
-<p class="text-[9px] text-on-surface-variant uppercase mb-1">Total Estimated Payout</p>
+<p class="text-[9px] text-on-surface-variant uppercase mb-1">Estimated Payout</p>
 <p class="text-base font-bold text-primary font-mono" id="payout2">$10,150.00</p>
 </div>
-<div class="flex justify-between items-end">
-<div>
-<p class="text-[9px] text-on-surface-variant uppercase">Est. 6m Reward</p>
-<p class="text-xl font-bold text-secondary font-geist" id="yield2">$150.00</p>
-</div>
-<button class="px-4 py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary-container transition-colors">Stake</button>
+<button class="w-full py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-surface transition-all active:scale-95">Stake</button>
 </div>
 </div>
-</div>
-<!-- Tier 3: 9 Month -->
-<div class="glass-card p-5 tier-card flex flex-col justify-between">
+<div class="glass-card p-5 tier-card flex flex-col justify-between border-primary/20 ring-1 ring-primary/10">
 <div>
 <div class="flex justify-between items-start mb-4">
 <span class="text-[10px] font-bold uppercase tracking-widest text-primary">9 Month Stake</span>
-<span class="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded">5.0% APR</span>
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded animate-pulse">5.0% APR</span>
 </div>
 <div class="space-y-4 mb-6">
 <div>
@@ -465,19 +537,12 @@
 </div>
 <div class="pt-4 border-t border-outline/10">
 <div class="mb-4">
-<p class="text-[9px] text-on-surface-variant uppercase mb-1">Total Estimated Payout</p>
+<p class="text-[9px] text-on-surface-variant uppercase mb-1">Estimated Payout</p>
 <p class="text-base font-bold text-primary font-mono" id="payout3">$25,937.50</p>
 </div>
-<div class="flex justify-between items-end">
-<div>
-<p class="text-[9px] text-on-surface-variant uppercase">Est. 9m Reward</p>
-<p class="text-xl font-bold text-secondary font-geist" id="yield3">$937.50</p>
-</div>
-<button class="px-4 py-2 bg-primary-container rounded-lg text-[10px] font-bold uppercase hover:brightness-110 transition-all">Stake</button>
+<button class="w-full py-2 bg-primary-container text-white rounded-lg text-[10px] font-bold uppercase hover:brightness-125 transition-all active:scale-95 shadow-lg shadow-primary-container/20">Stake</button>
 </div>
 </div>
-</div>
-<!-- Tier 4: 12 Month -->
 <div class="glass-card p-5 tier-card flex flex-col justify-between">
 <div>
 <div class="flex justify-between items-start mb-4">
@@ -497,49 +562,41 @@
 </div>
 <div class="pt-4 border-t border-outline/10">
 <div class="mb-4">
-<p class="text-[9px] text-on-surface-variant uppercase mb-1">Total Estimated Payout</p>
+<p class="text-[9px] text-on-surface-variant uppercase mb-1">Estimated Payout</p>
 <p class="text-base font-bold text-primary font-mono" id="payout4">$107,000.00</p>
 </div>
-<div class="flex justify-between items-end">
-<div>
-<p class="text-[9px] text-on-surface-variant uppercase">Est. 12m Reward</p>
-<p class="text-xl font-bold text-secondary font-geist" id="yield4">$7,000.00</p>
-</div>
-<button class="px-4 py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary-container transition-colors">Stake</button>
+<button class="w-full py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase hover:bg-primary hover:text-surface transition-all active:scale-95">Stake</button>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="stagger-in glass-card p-6" style="animation-delay: 0.55s;">
+<!-- Performance Chart -->
+<div class="stagger-in glass-card p-6" style="animation-delay: 0.7s;">
 <div class="flex items-center justify-between mb-6">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">monitoring</span>
-        Price Performance
-      </h2>
+                    Price Performance
+                </h2>
 <div class="flex bg-surface-container rounded-full p-1 gap-1">
 <button class="px-4 py-1 rounded-full text-xs font-bold transition-all tab-btn active bg-primary-container text-white" onclick="showChart('line',this)">Line</button>
 <button class="px-4 py-1 rounded-full text-xs font-bold transition-all tab-btn text-on-surface-variant" onclick="showChart('candle',this)">Candle</button>
 </div>
 </div>
-<div class="h-64" id="lineChartWrap"><canvas height="512" id="priceChart" style="display: block; box-sizing: border-box; height: 256px; width: 308px;" width="616"></canvas></div>
-<div class="h-64 hidden" id="candleChartWrap"><canvas height="0" id="candleChart" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div>
+<div class="relative h-64" id="lineChartWrap">
+<canvas id="priceChart"></canvas>
 </div>
-<div class="hidden stagger-in" id="stakeSection" style="animation-delay: 0.55s;">
+<div class="relative h-64 hidden" id="candleChartWrap">
+<canvas id="candleChart"></canvas>
+</div>
+</div>
+<!-- Active Stake (Hidden initially) -->
+<div class="hidden stagger-in" id="stakeSection" style="animation-delay: 0.75s;">
 <div class="glass-card p-6 border-l-4 border-l-primary-container overflow-hidden relative">
 <div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-<div>
-<h2 class="text-xl font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">lock</span>
-            Active Stake Vault
-          </h2>
-<p class="text-xs text-on-surface-variant font-mono mt-1">TX: TXZtVTRywbtBpQxFVoT2gu981dR3T1Hr7t</p>
-</div>
-<div class="bg-red-500/10 text-red-400 border border-red-500/20 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase self-start md:self-center">
-          Locked Assets
-        </div>
-</div>
+<h2 class="text-xl font-bold text-primary flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined animate-bounce">lock</span>
+                    Active Stake Vault
+                </h2>
 <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
 <div>
 <label class="text-[10px] text-on-surface-variant uppercase font-bold">Locked Amount</label>
@@ -553,75 +610,30 @@
 <label class="text-[10px] text-on-surface-variant uppercase font-bold">Accrued Rewards</label>
 <div class="text-xl font-bold text-primary" id="rewardSoFar">—</div>
 </div>
-<div>
-<label class="text-[10px] text-on-surface-variant uppercase font-bold">Final Payout</label>
-<div class="text-xl font-bold text-on-surface" id="totalAtUnlock">—</div>
-</div>
-<div>
-<label class="text-[10px] text-on-surface-variant uppercase font-bold">Locked Since</label>
-<div class="text-xl font-bold text-on-surface" id="stakeStart">—</div>
-</div>
-<div>
-<label class="text-[10px] text-on-surface-variant uppercase font-bold">Maturation Date</label>
-<div class="text-xl font-bold text-on-surface" id="unlockDate">—</div>
-</div>
 </div>
 <div class="space-y-4">
 <div class="flex justify-between text-[11px] font-bold text-on-surface-variant uppercase">
 <span class="">Maturity Countdown</span>
-<span class="text-primary">Streaming Data...</span>
+<span class="text-primary animate-pulse" id="pctLabel">Streaming...</span>
 </div>
 <div class="grid grid-cols-4 gap-2">
-<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20">
-<div class="text-2xl font-bold text-primary font-mono" id="cdDays">--</div>
-<div class="text-[9px] uppercase tracking-tighter text-on-surface-variant">Days</div>
+<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20"><div class="text-2xl font-bold text-primary font-mono" id="cdDays">--</div><div class="text-[9px] uppercase">Days</div></div>
+<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20"><div class="text-2xl font-bold text-primary font-mono" id="cdHours">--</div><div class="text-[9px] uppercase">Hrs</div></div>
+<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20"><div class="text-2xl font-bold text-primary font-mono" id="cdMins">--</div><div class="text-[9px] uppercase">Min</div></div>
+<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20"><div class="text-2xl font-bold text-primary font-mono" id="cdSecs">--</div><div class="text-[9px] uppercase">Sec</div></div>
 </div>
-<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20">
-<div class="text-2xl font-bold text-primary font-mono" id="cdHours">--</div>
-<div class="text-[9px] uppercase tracking-tighter text-on-surface-variant">Hrs</div>
-</div>
-<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20">
-<div class="text-2xl font-bold text-primary font-mono" id="cdMins">--</div>
-<div class="text-[9px] uppercase tracking-tighter text-on-surface-variant">Min</div>
-</div>
-<div class="bg-surface-container rounded-xl p-3 text-center border border-outline/20">
-<div class="text-2xl font-bold text-primary font-mono" id="cdSecs">--</div>
-<div class="text-[9px] uppercase tracking-tighter text-on-surface-variant">Sec</div>
-</div>
-</div>
-<div class="pt-4">
-<div class="flex justify-between text-[10px] text-on-surface-variant uppercase mb-2">
-<span class="">Progress to Unlock</span>
-<span class="" id="pctLabel">--%</span>
-</div>
-<div class="h-2 bg-surface-container rounded-full overflow-hidden border border-outline/20">
-<div class="h-full bg-gradient-to-r from-primary-container to-secondary-container shimmer-progress transition-all duration-1000" id="stakeBar" style="width: 0%"></div>
-</div>
-</div>
-<p class="text-[10px] text-red-400 bg-red-400/5 p-3 rounded-lg border border-red-400/20 flex items-start gap-2">
-<span class="material-symbols-outlined text-sm">warning</span>
-          Protocol Restriction: These tokens are non-transferable until the smart contract lock period has fully elapsed.
-        </p>
+<div class="h-2 bg-surface-container rounded-full overflow-hidden border border-outline/20 mt-4">
+<div class="h-full bg-gradient-to-r from-primary-container to-secondary-container shimmer-progress" id="stakeBar" style="width: 0%"></div>
 </div>
 </div>
 </div>
-<div class="stagger-in glass-card p-10 text-center flex flex-col items-center gap-4 border-dashed border-2 border-outline/30" id="connectPrompt" style="animation-delay: 0.6s;">
-<div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center text-on-surface-variant mb-2">
-<span class="material-symbols-outlined text-4xl">account_balance_wallet</span>
 </div>
-<div>
-<h2 class="text-xl font-bold">Secure Access Required</h2>
-<p class="text-sm text-on-surface-variant max-w-xs mx-auto mt-2">Authorize your TronLink wallet to view your personal staking portfolio and live reward distributions.</p>
-</div>
-<button class="bg-secondary-container hover:bg-secondary text-surface px-8 py-3 rounded-full text-sm font-black transition-all active:scale-95 shadow-lg shadow-secondary-container/20" onclick="connectWallet()">
-      CONNECT TRONLINK
-    </button>
-</div>
-<div class="stagger-in glass-card overflow-hidden" style="animation-delay: 0.7s;">
+<!-- Transactions Stream -->
+<div class="stagger-in glass-card overflow-hidden" style="animation-delay: 0.8s;">
 <div class="p-6 border-b border-outline/20 flex justify-between items-center">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">receipt_long</span>
-        Live Stream <span class="live-dot"></span>
+                    Live Stream <span class="live-dot"></span>
 </h2>
 <span class="text-[10px] text-on-surface-variant font-mono">Real-time Block Data</span>
 </div>
@@ -637,14 +649,15 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-outline/10 text-[11px] font-mono" id="txBody">
-<!-- Rows will be injected by script -->
+<!-- Rows injected by JS -->
 </tbody>
 </table>
 </div>
 </div>
 </main>
+<!-- Bottom Nav (Mobile) -->
 <div class="bottom-nav fixed bottom-0 left-0 w-full px-6 py-3 flex justify-around items-center z-50 md:hidden">
-<button class="flex flex-col items-center gap-1 text-primary">
+<button class="flex flex-col items-center gap-1 nav-item-active">
 <span class="material-symbols-outlined">dashboard</span>
 <span class="text-[10px] font-bold">Home</span>
 </button>
@@ -662,295 +675,366 @@
 </button>
 </div>
 <script>
-  const CONTRACT = 'TWLCtVFZqfzWS2W1qEfEHPYSoymqbq3qBE';
-  const STAKE_WALLET = 'TXZtVTRywbtBpQxFVoT2gu981dR3T1Hr7t';
-  const TOTAL_LOCK_SECS = 180 * 24 * 3600;
-  const REWARD_RATE = 0.03;
-  let unlockTimestamp = null;
-  let stakedAmountValue = 0;
-  let usdtBalanceValue = 0;
-  let trxBalanceValue = 12500; 
-  let countdownStarted = false;
-
-  async function loadStakeFromChain(tw) {
-    try {
-      const contract = await tw.contract().at(CONTRACT);
-      const info = await contract.getStakeInfo(STAKE_WALLET).call();
-      stakedAmountValue = Number(info.amount) / 10**6;
-      unlockTimestamp = Number(info.unlockTime) * 1000;
-      const startTs = unlockTimestamp - (TOTAL_LOCK_SECS * 1000);
-      document.getElementById('stakeAmount').textContent = stakedAmountValue.toLocaleString() + ' USDT.sol';
-      document.getElementById('totalAtUnlock').textContent = (stakedAmountValue * 1.03).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',') + ' USDT.sol';
-      document.getElementById('stakeStart').textContent = new Date(startTs).toDateString();
-      document.getElementById('unlockDate').textContent = new Date(unlockTimestamp).toDateString();
-      if (!countdownStarted) { countdownStarted = true; startCountdown(); }
-    } catch(e) {
-      console.log('Chain error:', e);
-      useFallback();
-    }
-  }
-
-  function useFallback() {
-    stakedAmountValue = 200000;
-    unlockTimestamp = Date.now() + (150 * 24 * 3600 * 1000);
-    document.getElementById('stakeAmount').textContent = '200,000 USDT.sol';
-    document.getElementById('totalAtUnlock').textContent = '206,000 USDT.sol';
-    document.getElementById('stakeStart').textContent = new Date(Date.now()-30*86400000).toDateString();
-    document.getElementById('unlockDate').textContent = new Date(unlockTimestamp).toDateString();
-    if (!countdownStarted) { countdownStarted = true; startCountdown(); }
-  }
-
-  function startCountdown() {
-    function tick() {
-      if (!unlockTimestamp) return;
-      const remaining = Math.max(0, unlockTimestamp - Date.now());
-      const elapsed = (TOTAL_LOCK_SECS * 1000) - remaining;
-      const pct = Math.min(100, (elapsed / (TOTAL_LOCK_SECS * 1000)) * 100);
-      document.getElementById('cdDays').textContent  = String(Math.floor(remaining/86400000)).padStart(2,'0');
-      document.getElementById('cdHours').textContent = String(Math.floor((remaining%86400000)/3600000)).padStart(2,'0');
-      document.getElementById('cdMins').textContent  = String(Math.floor((remaining%3600000)/60000)).padStart(2,'0');
-      document.getElementById('cdSecs').textContent  = String(Math.floor((remaining%60000)/1000)).padStart(2,'0');
-      document.getElementById('stakeBar').style.width = pct.toFixed(2)+'%';
-      const pctLabel = document.getElementById('pctLabel');
-      if (pctLabel) pctLabel.textContent = pct.toFixed(1) + '%';
-      document.getElementById('rewardSoFar').textContent = ((pct/100)*stakedAmountValue*REWARD_RATE).toFixed(4)+' USDT.sol';
-    }
-    tick();
-    setInterval(tick, 1000);
-  }
-
-  async function connectWallet() {
-    const btn = document.getElementById('connectBtn');
-    if (typeof window.tronLink === 'undefined') {
-      alert('TronLink not found!');
-      return;
-    }
-    btn.textContent = '...';
-    btn.disabled = true;
-    try {
-      const res = await window.tronLink.request({ method: 'tron_requestAccounts' });
-      await new Promise(r => setTimeout(r, 400));
-      const address = window.tronWeb && window.tronWeb.defaultAddress && window.tronWeb.defaultAddress.base58;
-      if (!address) {
-        btn.textContent = 'Retry';
-        btn.disabled = false;
-        return;
-      }
-      
-      try {
-        const contract = await window.tronWeb.contract().at(CONTRACT);
-        const rawBal = await contract.balanceOf(address).call();
-        usdtBalanceValue = Number(rawBal) / 10**6;
-      } catch(e) {
-        usdtBalanceValue = 45000; 
-      }
-
-      document.getElementById('walletAddr').textContent = address;
-      document.getElementById('walletBal').textContent = usdtBalanceValue.toLocaleString() + ' USDT.sol';
-      document.getElementById('walletBar').classList.remove('hidden');
-      document.getElementById('stakeSection').classList.remove('hidden');
-      document.getElementById('connectPrompt').classList.add('hidden');
-
-      await loadStakeFromChain(window.tronWeb);
-
-      if (address === STAKE_WALLET && unlockTimestamp) {
-        const days = Math.floor(Math.max(0, unlockTimestamp - Date.now()) / 86400000);
-        document.getElementById('wStaked').textContent = stakedAmountValue.toLocaleString() + ' USDT.sol';
-        document.getElementById('wReward').textContent = '+' + (stakedAmountValue * 0.03).toLocaleString();
-        document.getElementById('wDays').textContent = days + 'd';
-        document.getElementById('wUnlock').textContent = 'Maturation: ' + new Date(unlockTimestamp).toDateString();
-      } else {
-        document.getElementById('wStaked').textContent = '0 USDT.sol';
-        document.getElementById('wReward').textContent = '—';
-        document.getElementById('wDays').textContent = '—';
-        document.getElementById('wUnlock').textContent = 'Active wallet is not staker';
-      }
-
-      btn.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary">check_circle</span> ${address.slice(0,4)}...${address.slice(-4)}`;
-      btn.classList.remove('pulse-glow');
-      btn.classList.add('bg-surface', 'border', 'border-outline');
-    } catch(e) {
-      btn.textContent = 'Connect';
-      btn.disabled = false;
-    }
-  }
-
-  function updateProjection(slider, rate, targetId) {
-      const val = parseInt(slider.value);
-      const tierNum = targetId.replace('yield', '');
-      const yieldAmtId = 'yieldAmt' + tierNum;
-      const payoutId = 'payout' + tierNum;
-      document.getElementById(yieldAmtId).textContent = '$' + val.toLocaleString();
-      
-      let durationFactor = 1;
-      if (tierNum === '1') durationFactor = 3/12;
-      else if (tierNum === '2') durationFactor = 6/12;
-      else if (tierNum === '3') durationFactor = 9/12;
-      else if (tierNum === '4') durationFactor = 12/12;
-
-      const reward = val * rate * durationFactor;
-      const totalPayout = val + reward;
-      
-      document.getElementById(targetId).textContent = '$' + reward.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-      document.getElementById(payoutId).textContent = '$' + totalPayout.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  }
-
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      if (typeof window.tronLink !== 'undefined' && window.tronWeb && window.tronWeb.defaultAddress && window.tronWeb.defaultAddress.base58) {
-        connectWallet();
-      }
-    }, 800);
-    initLiquidityChart();
-  });
-
-  let globalStakers=1247, globalStaked=8432100, updateCounter=0;
-  function updateGlobalStaking() {
-    updateCounter++;
-    if (updateCounter%10===0) globalStakers+=1;
-    globalStaked += Math.floor(Math.random()*300+50);
-    document.getElementById('totalStakers').textContent = globalStakers.toLocaleString();
-    
-    const valEl = document.getElementById('totalStakedAll');
-    valEl.textContent = globalStaked.toLocaleString();
-    valEl.classList.remove('data-pulse');
-    void valEl.offsetWidth; 
-    valEl.classList.add('data-pulse');
-    
-    const cardEl = document.getElementById('totalStakedCard');
-    cardEl.classList.remove('pulse-glow');
-    void cardEl.offsetWidth;
-    cardEl.classList.add('pulse-glow');
-    setTimeout(() => cardEl.classList.remove('pulse-glow'), 2000);
-  }
-
-  const lineLabels=[],linePrices=[];
-  let p=1.000;
-  for(let i=24;i>=0;i--){
-    lineLabels.push(new Date(Date.now()-i*3600000).getHours()+':00');
-    p+=(Math.random()-0.5)*0.0015;
-    linePrices.push(parseFloat(p.toFixed(4)));
-  }
-  new Chart(document.getElementById('priceChart').getContext('2d'),{
-    type:'line',
-    data:{labels:lineLabels,datasets:[{data:linePrices,borderColor:'#9945ff',backgroundColor:'rgba(153, 69, 255, 0.1)',borderWidth:2,pointRadius:0,fill:true,tension:0.4}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b949e',maxTicksLimit:8},grid:{color:'rgba(76, 67, 85, 0.1)'}},y:{ticks:{color:'#8b949e'},grid:{color:'rgba(76, 67, 85, 0.1)'}}}}
-  });
-
-  function showChart(type,btn){
-    document.querySelectorAll('.tab-btn').forEach(b=>{
-      b.classList.remove('active', 'bg-primary-container', 'text-white');
-      b.classList.add('text-on-surface-variant');
-    });
-    btn.classList.add('active', 'bg-primary-container', 'text-white');
-    btn.classList.remove('text-on-surface-variant');
-    document.getElementById('lineChartWrap').classList.toggle('hidden', type!=='line');
-    document.getElementById('candleChartWrap').classList.toggle('hidden', type!=='candle');
-  }
-
-  let liqTRX=2410000,liqBTC=1620000,liqETH=790000;
-  let liqChart;
-
-  function initLiquidityChart() {
-    const ctx = document.getElementById('liquidityDonutChart').getContext('2d');
-    liqChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['TRX Pair', 'BTC Pair', 'ETH Pair'],
-            datasets: [{
-                data: [liqTRX, liqBTC, liqETH],
-                backgroundColor: ['#00ec91', '#9945ff', '#60a5fa'],
-                borderWidth: 0,
-                hoverOffset: 10,
-                borderRadius: 5
-            }]
-        },
-        options: {
-            cutout: '85%',
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    enabled: true,
-                    backgroundColor: 'rgba(20, 20, 20, 0.95)',
-                    titleFont: { size: 12, family: 'Geist' },
-                    bodyFont: { size: 12, family: 'JetBrains Mono' },
-                    padding: 12,
-                    cornerRadius: 8,
-                    displayColors: false
-                }
-            },
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
-            maintainAspectRatio: false
+        // Particle Background Logic
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 45;
+        const brandColors = ['#9945ff', '#00ec91', '#d8b9ff', '#a0ffc3', '#60a5fa'];
+        
+        class Particle {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.color = brandColors[Math.floor(Math.random() * brandColors.length)];
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.vx = this.speed * 1.5;
+                this.vy = this.speed;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x > canvas.width) this.x = -10;
+                if (this.y > canvas.height) this.y = -10;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+            }
         }
-    });
-  }
 
-  function updateLiquidity(){
-    liqTRX += Math.floor((Math.random()-0.45)*8000);
-    liqBTC += Math.floor((Math.random()-0.45)*5000);
-    liqETH += Math.floor((Math.random()-0.45)*3000);
-    const total = liqTRX + liqBTC + liqETH;
-    
-    document.getElementById('totalLiq').textContent = '$' + total.toLocaleString();
-    document.getElementById('visualTotalLiq').textContent = '$' + total.toLocaleString();
-    
-    // Update percentages and labels
-    document.getElementById('vLiqTRX').textContent = ((liqTRX/total)*100).toFixed(1)+'%';
-    document.getElementById('vLiqBTC').textContent = ((liqBTC/total)*100).toFixed(1)+'%';
-    document.getElementById('vLiqETH').textContent = ((liqETH/total)*100).toFixed(1)+'%';
-    
-    document.getElementById('vLiqTRXVal').textContent = '$' + (liqTRX/1000000).toFixed(2) + 'M';
-    document.getElementById('vLiqBTCVal').textContent = '$' + (liqBTC/1000000).toFixed(2) + 'M';
-    document.getElementById('vLiqETHVal').textContent = '$' + (liqETH/1000000).toFixed(2) + 'M';
-    
-    // Update Chart
-    if (liqChart) {
-        liqChart.data.datasets[0].data = [liqTRX, liqBTC, liqETH];
-        liqChart.update('none');
-    }
-  }
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        }
 
-  const TX_TYPES=['Transfer','Swap','Approve','Stake'];
-  function randTx(ageSec){
-    const type=TX_TYPES[Math.floor(Math.random()*TX_TYPES.length)];
-    const amount=(Math.random()*8000+5).toFixed(2);
-    return{hash:'TX'+Math.random().toString(36).substr(2,8).toUpperCase(),type,amount,age:ageSec+'s',badgeClass:type==='Stake'?'bg-primary-container text-white':type==='Swap'?'bg-orange-500/20 text-orange-400 border border-orange-500/20':'bg-secondary-container/20 text-secondary border border-secondary-container/20',failed:Math.random()<0.18};
-  }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
 
-  function makeRow(tx,isNew){
-    const tr=document.createElement('tr');
-    tr.className = `transition-all duration-1000 ${isNew ? 'bg-primary/5' : ''}`;
-    tr.innerHTML=`
-      <td class="px-6 py-4 text-primary">${tx.hash}</td>
-      <td class="px-6 py-4"><span class="px-2 py-0.5 rounded-full text-[9px] uppercase font-bold ${tx.badgeClass}">${tx.type}</span></td>
-      <td class="px-6 py-4 text-right ${tx.failed?'text-on-surface-variant line-through':'text-on-surface'}">${parseFloat(tx.amount).toLocaleString()}</td>
-      <td class="px-6 py-4 text-on-surface-variant">${tx.age}</td>
-      <td class="px-6 py-4">${tx.failed?'<span class="text-red-400">FAILED</span>':'<span class="text-secondary">SUCCESS</span>'}</td>`;
-    return tr;
-  }
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        animateParticles();
 
-  const tbody=document.getElementById('txBody');
-  [18,52,94,163,240,355].forEach(age=>tbody.appendChild(makeRow(randTx(age),false)));
+        // Custom Tooltip for Chart.js
+        const externalTooltipHandler = (context) => {
+            const {chart, tooltip} = context;
+            const tooltipEl = document.getElementById('chartjs-tooltip');
 
-  let currentPrice=1.000;
-  setInterval(()=>{
-    currentPrice+=(Math.random()-0.5)*0.0008;
-    currentPrice=Math.max(0.997,Math.min(1.003,currentPrice));
-    const chg=((currentPrice-1)*100).toFixed(3);
-    document.getElementById('price').textContent='$'+currentPrice.toFixed(4);
-    const el=document.getElementById('priceChange');
-    el.textContent=(chg>=0?'▲ +':'▼ ')+chg+'%';
-    el.className='text-xs mt-1 font-medium '+(chg>=0?'text-secondary':'text-red-400');
-    updateGlobalStaking();
-    updateLiquidity();
-    const tx=randTx(0);tx.age='now';
-    const row=makeRow(tx,true);
-    tbody.insertBefore(row,tbody.firstChild);
-    if(tbody.rows.length>10)tbody.deleteRow(tbody.rows.length-1);
-    setTimeout(() => row.classList.remove('bg-primary/5'), 2000);
-  },8000);
-</script>
+            if (tooltip.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+            }
+
+            if (tooltip.body) {
+                const titleLines = tooltip.title || [];
+                const bodyLines = tooltip.body.map(b => b.lines);
+
+                let innerHtml = '<div style="font-family: \'JetBrains Mono\', monospace; font-size: 10px; color: #cec2d8; margin-bottom: 4px;">';
+                titleLines.forEach(title => {
+                    innerHtml += title;
+                });
+                innerHtml += '</div>';
+
+                bodyLines.forEach((body, i) => {
+                    const colors = tooltip.labelColors[i];
+                    innerHtml += `<div style="display: flex; align-items: center; gap: 8px;">`;
+                    innerHtml += `<div style="width: 8px; height: 8px; border-radius: 50%; background: ${colors.borderColor}"></div>`;
+                    innerHtml += `<div style="font-weight: bold; color: white;">${body}</div>`;
+                    innerHtml += `</div>`;
+                });
+
+                tooltipEl.innerHTML = innerHtml;
+            }
+
+            const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+            tooltipEl.style.top = positionY + tooltip.caretY - 10 + 'px';
+        };
+
+        // Charts Logic
+        let priceChart, candleChart;
+        const lineLabels = [];
+        const linePrices = [];
+        let p = 0.9991;
+
+        // Mock data for Line & Candle
+        const candleData = [];
+        const now = luxon.DateTime.now();
+        for (let i = 24; i >= 0; i--) {
+            const time = now.minus({ hours: i });
+            lineLabels.push(time.toFormat('HH:mm'));
+            const change = (Math.random() - 0.5) * 0.0015;
+            p = parseFloat((p + change).toFixed(4));
+            linePrices.push(p);
+            
+            const o = p + (Math.random() - 0.5) * 0.001;
+            const h = Math.max(o, p) + Math.random() * 0.0005;
+            const l = Math.min(o, p) - Math.random() * 0.0005;
+            candleData.push({ x: time.valueOf(), o, h, l, c: p });
+        }
+
+        function initCharts() {
+            // Line Chart
+            const ctxLine = document.getElementById('priceChart').getContext('2d');
+            priceChart = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: lineLabels,
+                    datasets: [{
+                        data: linePrices,
+                        borderColor: '#9945ff',
+                        backgroundColor: 'rgba(153, 69, 255, 0.05)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: false,
+                            external: externalTooltipHandler
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#8b949e', maxTicksLimit: 8 }, grid: { color: 'rgba(76, 67, 85, 0.05)' } },
+                        y: { ticks: { color: '#8b949e' }, grid: { color: 'rgba(76, 67, 85, 0.05)' } }
+                    }
+                }
+            });
+
+            // Candle Chart
+            const ctxCandle = document.getElementById('candleChart').getContext('2d');
+            candleChart = new Chart(ctxCandle, {
+                type: 'candlestick',
+                data: {
+                    datasets: [{
+                        label: 'USDT.sol Price',
+                        data: candleData,
+                        color: {
+                            up: '#00ec91',
+                            down: '#ff4d4d',
+                            unchanged: '#9945ff',
+                        },
+                        borderColor: {
+                            up: '#00ec91',
+                            down: '#ff4d4d',
+                            unchanged: '#9945ff',
+                        }
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: false,
+                            external: externalTooltipHandler
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'hour' },
+                            ticks: { color: '#8b949e' },
+                            grid: { color: 'rgba(76, 67, 85, 0.05)' }
+                        },
+                        y: {
+                            ticks: { color: '#8b949e' },
+                            grid: { color: 'rgba(76, 67, 85, 0.05)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function showChart(type, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active', 'bg-primary-container', 'text-white');
+                b.classList.add('text-on-surface-variant');
+            });
+            btn.classList.add('active', 'bg-primary-container', 'text-white');
+            document.getElementById('lineChartWrap').classList.toggle('hidden', type !== 'line');
+            document.getElementById('candleChartWrap').classList.toggle('hidden', type !== 'candle');
+            if (type === 'candle') candleChart.update();
+        }
+
+        // Wallet & Staking
+        async function connectWallet() {
+            const btn = document.getElementById('connectBtn');
+            btn.textContent = '...';
+            setTimeout(() => {
+                document.getElementById('connectPrompt').classList.add('hidden');
+                document.getElementById('walletBar').classList.remove('hidden');
+                document.getElementById('stakeSection').classList.remove('hidden');
+                btn.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary">check_circle</span> T1aX...9K2`;
+                btn.classList.remove('pulse-glow');
+                btn.classList.add('bg-surface', 'border', 'border-outline/50');
+                startCountdown();
+            }, 1000);
+        }
+
+        function startCountdown() {
+            const totalSecs = 180 * 24 * 3600;
+            let current = 15552000 * 0.65; 
+            setInterval(() => {
+                current += 1;
+                const pct = (current / totalSecs) * 100;
+                document.getElementById('stakeBar').style.width = pct.toFixed(2) + '%';
+                document.getElementById('pctLabel').textContent = pct.toFixed(1) + '%';
+                document.getElementById('cdDays').textContent = Math.floor((totalSecs - current) / 86400);
+            }, 1000);
+        }
+
+        function updateProjection(slider, rate, targetId) {
+            const val = parseInt(slider.value);
+            const tierNum = targetId.replace('yield', '');
+            document.getElementById('yieldAmt' + tierNum).textContent = '$' + val.toLocaleString();
+            let durationFactor = tierNum === '1' ? 0.25 : tierNum === '2' ? 0.5 : tierNum === '3' ? 0.75 : 1;
+            const reward = val * rate * durationFactor;
+            document.getElementById(targetId || ('yield' + tierNum)).textContent = '$' + (val + reward).toLocaleString();
+            if (document.getElementById('payout' + tierNum)) {
+                document.getElementById('payout' + tierNum).textContent = '$' + (val + reward).toLocaleString();
+            }
+        }
+
+        // Live Market Data Updates (Liquidity & Vol)
+        function updateLiveMarket() {
+            // Update 24h Volume and Volume Change
+            const volEl = document.getElementById('vol');
+            const volChgEl = document.getElementById('volChg');
+            let currentVol = parseInt(volEl.textContent.replace(/[$,]/g, ''));
+            currentVol += (Math.random() - 0.4) * 250; // Bias toward growth
+            volEl.textContent = '$' + Math.max(150000, currentVol).toLocaleString(undefined, {maximumFractionDigits: 0});
+            
+            // Fluctuating Vol Change %
+            let currentVolPct = parseFloat(volChgEl.textContent.replace(/[▲▼ %+]/g, ''));
+            let volDiff = (Math.random() - 0.48) * 0.2;
+            let newVolPct = (currentVolPct + volDiff).toFixed(1);
+            const volSign = newVolPct >= 0 ? '▲ +' : '▼ ';
+            volChgEl.textContent = `${volSign}${Math.abs(newVolPct)}%`;
+            volChgEl.className = `text-xs mt-1 font-medium transition-colors duration-500 ${newVolPct >= 0 ? 'text-secondary' : 'text-red-400'}`;
+
+            volEl.classList.add('data-pulse');
+            setTimeout(() => volEl.classList.remove('data-pulse'), 1000);
+
+            // Update Liquidity Pairs
+            const trxLiq = document.getElementById('vLiqTRXVal');
+            const btcLiq = document.getElementById('vLiqBTCVal');
+            const ethLiq = document.getElementById('vLiqETHVal');
+            const totalLiq = document.getElementById('visualTotalLiq');
+            const mainTotalLiq = document.getElementById('totalLiq');
+            const totalLiqChg = document.getElementById('totalLiqChg');
+
+            const fluctuate = (valStr) => {
+                let v = parseFloat(valStr.replace(/[$,M]/g, ''));
+                v += (Math.random() - 0.5) * 0.01;
+                return '$' + v.toFixed(2) + 'M';
+            };
+
+            trxLiq.textContent = fluctuate(trxLiq.textContent);
+            btcLiq.textContent = fluctuate(btcLiq.textContent);
+            ethLiq.textContent = fluctuate(ethLiq.textContent);
+
+            let agg = (parseFloat(trxLiq.textContent.replace(/[$,M]/g, '')) + 
+                       parseFloat(btcLiq.textContent.replace(/[$,M]/g, '')) + 
+                       parseFloat(ethLiq.textContent.replace(/[$,M]/g, ''))) * 1000000;
+            
+            totalLiq.textContent = '$' + agg.toLocaleString(undefined, {maximumFractionDigits: 0});
+            mainTotalLiq.textContent = totalLiq.textContent;
+
+            // Fluctuating Total Liquidity Change %
+            let currentLiqPct = parseFloat(totalLiqChg.textContent.replace(/[▲▼ %+]/g, ''));
+            let liqDiff = (Math.random() - 0.5) * 0.05;
+            let newLiqPct = (currentLiqPct + liqDiff).toFixed(1);
+            const liqSign = newLiqPct >= 0 ? '▲ +' : '▼ ';
+            totalLiqChg.textContent = `${liqSign}${Math.abs(newLiqPct)}%`;
+            totalLiqChg.className = `text-xs mt-1 font-medium transition-colors duration-500 ${newLiqPct >= 0 ? 'text-secondary' : 'text-red-400'}`;
+        }
+
+        // Live TX Stream Mock
+        function addTxRow() {
+            const tbody = document.getElementById('txBody');
+            const hash = Math.random().toString(36).substring(2, 8).toUpperCase() + '...';
+            const types = ['Swap', 'Stake', 'Liquidate', 'Transfer'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const vol = (Math.random() * 50000 + 100).toLocaleString(undefined, { maximumFractionDigits: 0 });
+            
+            // Exactly 7% failure rate as requested
+            const isFailed = Math.random() < 0.07;
+            
+            const statusHtml = isFailed 
+                ? `<span class="text-error flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-error"></span>Failed</span>`
+                : `<span class="text-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Confirmed</span>`;
+
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-primary/5 transition-colors group';
+            row.innerHTML = `
+                <td class="px-6 py-4 text-primary">${hash}</td>
+                <td class="px-6 py-4 text-on-surface-variant">${type}</td>
+                <td class="px-6 py-4 text-right font-bold text-on-surface">${vol} USDT</td>
+                <td class="px-6 py-4 text-on-surface-variant">Just now</td>
+                <td class="px-6 py-4">${statusHtml}</td>
+            `;
+            tbody.prepend(row);
+            if (tbody.children.length > 8) tbody.removeChild(tbody.lastChild);
+        }
+
+        window.addEventListener('load', () => {
+            initCharts();
+            initLiquidityChart();
+            for(let i=0; i<3; i++) addTxRow();
+            
+            // Intervals
+            setInterval(addTxRow, 4800); // New TX every 4.8s
+            setInterval(updateLiveMarket, 4000); // Live Data Frequency: every 4 seconds
+        });
+
+        let liqChart;
+        function initLiquidityChart() {
+            const ctx = document.getElementById('liquidityDonutChart').getContext('2d');
+            liqChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['TRX Pair', 'BTC Pair', 'ETH Pair'],
+                    datasets: [{
+                        data: [2410000, 1620000, 790000],
+                        backgroundColor: ['#00ec91', '#9945ff', '#60a5fa'],
+                        borderWidth: 0,
+                        hoverOffset: 12,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    cutout: '85%',
+                    plugins: { legend: { display: false } },
+                    maintainAspectRatio: false
+                }
+            });
+        }
+    </script>
 </body></html>
