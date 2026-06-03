@@ -305,45 +305,76 @@
 <span class="text-xl font-bold text-on-surface font-geist">100%</span>
 </div>
 </div>
-<div class="flex flex-col gap-4 w-full md:w-auto min-w-[240px]">
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-secondary/5 transition-colors cursor-default">
-<div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,243,145,0.4)]"></div>
-<div>
-<div class="text-xs font-bold text-on-surface">TRX Pair</div>
-<div class="text-[10px] text-on-surface-variant uppercase">Tron Network</div>
+<div class="flex flex-col gap-3 w-full md:w-auto min-w-[260px]">
+<!-- TRX - بیشترین -->
+<div class="bg-surface-container/40 p-3 rounded-xl border border-outline/10 flex justify-between items-center hover:bg-secondary/5 transition-colors cursor-default">
+  <div class="flex items-center gap-3">
+    <div class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,243,145,0.4)]"></div>
+    <div>
+      <div class="text-xs font-bold text-on-surface">USDT.sol / TRX</div>
+      <div class="text-[10px] text-on-surface-variant uppercase">Tron Network · SunSwap</div>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="text-sm font-mono font-bold text-secondary" id="vLiqTRX">38.2%</div>
+    <div class="text-[9px] text-on-surface-variant" id="vLiqTRXVal">$2.41M</div>
+  </div>
 </div>
+<!-- ETH -->
+<div class="bg-surface-container/40 p-3 rounded-xl border border-outline/10 flex justify-between items-center hover:bg-blue-400/5 transition-colors cursor-default">
+  <div class="flex items-center gap-3">
+    <div class="w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.4)]"></div>
+    <div>
+      <div class="text-xs font-bold text-on-surface">USDT.sol / ETH</div>
+      <div class="text-[10px] text-on-surface-variant uppercase">Ethereum · Uniswap V3</div>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="text-sm font-mono font-bold text-blue-400" id="vLiqETH">22.4%</div>
+    <div class="text-[9px] text-on-surface-variant" id="vLiqETHVal">$1.41M</div>
+  </div>
 </div>
-<div class="text-right">
-<div class="text-sm font-mono font-bold text-secondary" id="vLiqTRX">49.9%</div>
-<div class="text-[9px] text-on-surface-variant" id="vLiqTRXVal">$2.41M</div>
+<!-- BTC -->
+<div class="bg-surface-container/40 p-3 rounded-xl border border-outline/10 flex justify-between items-center hover:bg-primary/5 transition-colors cursor-default">
+  <div class="flex items-center gap-3">
+    <div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(153,69,255,0.4)]"></div>
+    <div>
+      <div class="text-xs font-bold text-on-surface">USDT.sol / BTC</div>
+      <div class="text-[10px] text-on-surface-variant uppercase">Bitcoin Bridge</div>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="text-sm font-mono font-bold text-primary" id="vLiqBTC">18.7%</div>
+    <div class="text-[9px] text-on-surface-variant" id="vLiqBTCVal">$1.18M</div>
+  </div>
 </div>
+<!-- BNB -->
+<div class="bg-surface-container/40 p-3 rounded-xl border border-outline/10 flex justify-between items-center hover:bg-amber-400/5 transition-colors cursor-default">
+  <div class="flex items-center gap-3">
+    <div class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.4)]"></div>
+    <div>
+      <div class="text-xs font-bold text-on-surface">USDT.sol / BNB</div>
+      <div class="text-[10px] text-on-surface-variant uppercase">BSC · PancakeSwap</div>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="text-sm font-mono font-bold text-amber-400" id="vLiqBNB">12.1%</div>
+    <div class="text-[9px] text-on-surface-variant" id="vLiqBNBVal">$0.76M</div>
+  </div>
 </div>
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-primary/5 transition-colors cursor-default">
-<div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(153,69,255,0.4)]"></div>
-<div>
-<div class="text-xs font-bold text-on-surface">BTC Pair</div>
-<div class="text-[10px] text-on-surface-variant uppercase">Bitcoin Bridge</div>
-</div>
-</div>
-<div class="text-right">
-<div class="text-sm font-mono font-bold text-primary" id="vLiqBTC">33.6%</div>
-<div class="text-[9px] text-on-surface-variant" id="vLiqBTCVal">$1.62M</div>
-</div>
-</div>
-<div class="bg-surface-container/40 p-4 rounded-xl border border-outline/10 flex justify-between items-center group hover:bg-blue-400/5 transition-colors cursor-default">
-<div class="flex items-center gap-3">
-<div class="w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.4)]"></div>
-<div>
-<div class="text-xs font-bold text-on-surface">ETH Pair</div>
-<div class="text-[10px] text-on-surface-variant uppercase">Ethereum Bridge</div>
-</div>
-</div>
-<div class="text-right">
-<div class="text-sm font-mono font-bold text-blue-400" id="vLiqETH">16.5%</div>
-<div class="text-[9px] text-on-surface-variant" id="vLiqETHVal">$0.79M</div>
-</div>
+<!-- SOL -->
+<div class="bg-surface-container/40 p-3 rounded-xl border border-outline/10 flex justify-between items-center hover:bg-purple-400/5 transition-colors cursor-default">
+  <div class="flex items-center gap-3">
+    <div class="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.4)]"></div>
+    <div>
+      <div class="text-xs font-bold text-on-surface">USDT.sol / SOL</div>
+      <div class="text-[10px] text-on-surface-variant uppercase">Solana · Jupiter</div>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="text-sm font-mono font-bold text-purple-400" id="vLiqSOL">8.6%</div>
+    <div class="text-[9px] text-on-surface-variant" id="vLiqSOLVal">$0.54M</div>
+  </div>
 </div>
 </div>
 </div>
@@ -622,9 +653,143 @@
 <tbody class="divide-y divide-outline/10 text-[11px] font-mono" id="txBody">
 <!-- Rows injected by script -->
 </tbody>
-</table>
 </div>
 </div>
+
+<!-- ===== SWAP SECTION ===== -->
+<div class="stagger-in glass-card overflow-hidden" id="swapSection">
+  <div class="p-6 border-b border-outline/10">
+    <h2 class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-1">Decentralized Exchange</h2>
+    <div class="text-2xl font-bold text-on-surface font-geist">Swap Tokens</div>
+    <p class="text-xs text-on-surface-variant mt-1">Trade USDT.sol across multiple networks with real-time gas estimates</p>
+  </div>
+
+  <div class="p-6 space-y-4">
+    <!-- Network selector -->
+    <div class="flex gap-2 flex-wrap">
+      <button onclick="selectNetwork('tron')" id="net-tron" class="net-btn px-3 py-1.5 rounded-full text-xs font-bold border border-secondary-container bg-secondary-container/20 text-secondary transition-all">
+        🔴 TRON
+      </button>
+      <button onclick="selectNetwork('eth')" id="net-eth" class="net-btn px-3 py-1.5 rounded-full text-xs font-bold border border-outline/30 text-on-surface-variant transition-all hover:border-primary/50">
+        🔷 Ethereum
+      </button>
+      <button onclick="selectNetwork('bsc')" id="net-bsc" class="net-btn px-3 py-1.5 rounded-full text-xs font-bold border border-outline/30 text-on-surface-variant transition-all hover:border-primary/50">
+        🟡 BSC
+      </button>
+      <button onclick="selectNetwork('sol')" id="net-sol" class="net-btn px-3 py-1.5 rounded-full text-xs font-bold border border-outline/30 text-on-surface-variant transition-all hover:border-primary/50">
+        🟣 Solana
+      </button>
+      <button onclick="selectNetwork('arb')" id="net-arb" class="net-btn px-3 py-1.5 rounded-full text-xs font-bold border border-outline/30 text-on-surface-variant transition-all hover:border-primary/50">
+        🔵 Arbitrum
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- From -->
+      <div class="bg-surface-container rounded-xl p-4 border border-outline/20">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-[10px] text-on-surface-variant uppercase font-bold">From</span>
+          <span class="text-[10px] text-on-surface-variant">Balance: <span id="swapFromBal" class="text-secondary">—</span></span>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="fromToken" onchange="updateSwapPreview()" class="bg-surface border border-outline/30 text-on-surface rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-primary/50">
+            <option value="USDT">USDT.sol</option>
+            <option value="TRX">TRX</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+            <option value="BNB">BNB</option>
+            <option value="SOL">SOL</option>
+          </select>
+          <input id="fromAmount" type="number" placeholder="0.00" oninput="updateSwapPreview()"
+            class="flex-1 bg-transparent text-right text-xl font-bold text-on-surface outline-none placeholder-on-surface-variant/30 w-full"/>
+        </div>
+        <div class="text-right text-[10px] text-on-surface-variant mt-1" id="fromUSD">≈ $0.00</div>
+      </div>
+
+      <!-- Swap Arrow -->
+      <div class="flex items-center justify-center md:hidden">
+        <button onclick="flipTokens()" class="w-10 h-10 rounded-full bg-surface-container border border-outline/30 flex items-center justify-center hover:border-primary/50 transition-all">
+          <span class="material-symbols-outlined text-primary">swap_vert</span>
+        </button>
+      </div>
+
+      <!-- To -->
+      <div class="bg-surface-container rounded-xl p-4 border border-outline/20 relative">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-[10px] text-on-surface-variant uppercase font-bold">To (estimated)</span>
+          <button onclick="flipTokens()" class="hidden md:flex items-center gap-1 text-[10px] text-primary hover:text-secondary transition-colors">
+            <span class="material-symbols-outlined text-xs">swap_horiz</span> Flip
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="toToken" onchange="updateSwapPreview()" class="bg-surface border border-outline/30 text-on-surface rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:border-primary/50">
+            <option value="TRX">TRX</option>
+            <option value="USDT">USDT.sol</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+            <option value="BNB">BNB</option>
+            <option value="SOL">SOL</option>
+          </select>
+          <div id="toAmount" class="flex-1 text-right text-xl font-bold text-secondary">0.00</div>
+        </div>
+        <div class="text-right text-[10px] text-on-surface-variant mt-1" id="toUSD">≈ $0.00</div>
+      </div>
+    </div>
+
+    <!-- Slippage -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-[10px] text-on-surface-variant uppercase font-bold">Slippage Tolerance:</span>
+      <div class="flex gap-2">
+        <button onclick="setSlippage(0.1, this)" class="slip-btn px-3 py-1 rounded text-[10px] font-bold border border-outline/30 text-on-surface-variant hover:border-primary/50 transition-all">0.1%</button>
+        <button onclick="setSlippage(0.5, this)" class="slip-btn px-3 py-1 rounded text-[10px] font-bold border border-secondary-container bg-secondary-container/20 text-secondary transition-all active-slip">0.5%</button>
+        <button onclick="setSlippage(1.0, this)" class="slip-btn px-3 py-1 rounded text-[10px] font-bold border border-outline/30 text-on-surface-variant hover:border-primary/50 transition-all">1.0%</button>
+        <button onclick="setSlippage(3.0, this)" class="slip-btn px-3 py-1 rounded text-[10px] font-bold border border-outline/30 text-on-surface-variant hover:border-primary/50 transition-all">3.0%</button>
+      </div>
+      <span class="text-[10px] text-on-surface-variant ml-auto" id="slippageLabel">0.5%</span>
+    </div>
+
+    <!-- Gas & Route Info -->
+    <div class="bg-surface-container/50 rounded-xl p-4 border border-outline/10 space-y-2 text-xs" id="swapDetails">
+      <div class="flex justify-between">
+        <span class="text-on-surface-variant">Network</span>
+        <span class="font-bold text-on-surface" id="detailNetwork">🔴 TRON</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-on-surface-variant">Exchange Rate</span>
+        <span class="font-mono text-on-surface" id="detailRate">—</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-on-surface-variant">Price Impact</span>
+        <span class="font-bold" id="detailImpact">—</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-on-surface-variant">Route</span>
+        <span class="text-on-surface" id="detailRoute">—</span>
+      </div>
+      <div class="border-t border-outline/10 pt-2 flex justify-between">
+        <span class="text-on-surface-variant">Estimated Gas Fee</span>
+        <div class="text-right">
+          <div class="font-bold text-primary" id="detailGas">—</div>
+          <div class="text-[10px] text-on-surface-variant" id="detailGasUSD">—</div>
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-on-surface-variant">Minimum Received</span>
+        <span class="font-mono text-secondary" id="detailMinReceived">—</span>
+      </div>
+    </div>
+
+    <!-- Swap Button -->
+    <button onclick="executeSwap()" id="swapBtn"
+      class="w-full py-4 rounded-xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-primary-container to-secondary-container text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40"
+      disabled>
+      Enter Amount
+    </button>
+
+
+  </div>
+</div>
+
 </main>
 <div class="bottom-nav fixed bottom-0 left-0 w-full px-6 py-3 flex justify-around items-center z-50 md:hidden">
 <button class="flex flex-col items-center gap-1 text-primary">
@@ -681,34 +846,55 @@
   let countdownStarted = false;
   let currentPrice = 0.9993;
 
-  // Real-time stats simulation logic
-  let totalStaked = 6450210;
-  let totalStakers = 12842;
+  // ---- Seeded Daily Random System ----
+  const LAUNCH_DATE = new Date('2026-06-01');
+
+  function seededRandom(seed) {
+    const x = Math.sin(seed + 1) * 10000;
+    return x - Math.floor(x);
+  }
+
+  function getDailyIncrement(dayIndex) {
+    const r1 = seededRandom(dayIndex * 1234);
+    const r2 = seededRandom(dayIndex * 5678);
+    return {
+      stakers: Math.floor(r1 * (180 - 40) + 40),
+      staked:  Math.floor(r2 * (300000 - 20000) + 20000)
+    };
+  }
+
+  function getTotals() {
+    const daysPassed = Math.floor((Date.now() - LAUNCH_DATE) / 86400000);
+    let tStakers = 12842;
+    let tStaked = 6450210;
+    for (let i = 0; i < daysPassed; i++) {
+      const inc = getDailyIncrement(i);
+      tStakers += inc.stakers;
+      tStaked  += inc.staked;
+    }
+    // اضافه کردن مقدار امروز به صورت تدریجی بر اساس ساعت فعلی
+    const now = new Date();
+    const secondsToday = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const fractionOfDay = secondsToday / 86400;
+    const todayInc = getDailyIncrement(daysPassed);
+    tStakers += Math.floor(todayInc.stakers * fractionOfDay);
+    tStaked  += Math.floor(todayInc.staked  * fractionOfDay);
+    return { tStakers, tStaked };
+  }
+
+  let { tStakers: totalStakers, tStaked: totalStaked } = getTotals();
 
   function updateGlobalStats() {
-    // 20k-300k per day trajectory
-    // (Math.random() * (max - min) + min) / (24 * 60 * 12) per 5s interval
-    const dayStakedMin = 20000;
-    const dayStakedMax = 300000;
-    const stakedIncrement = (Math.random() * (dayStakedMax - dayStakedMin) + dayStakedMin) / (12 * 60 * 24);
-    
-    // 20-80 per day trajectory
-    const dayStakersMin = 20;
-    const dayStakersMax = 80;
-    // chance to add a staker in 5s: (avg per interval) / 1
-    const stakerIntervalChance = ((dayStakersMin + dayStakersMax) / 2) / (12 * 60 * 24);
-    const stakersIncrement = Math.random() < stakerIntervalChance ? 1 : 0;
-
-    totalStaked += stakedIncrement;
-    totalStakers += stakersIncrement;
+    const updated = getTotals();
+    totalStaked  = updated.tStaked;
+    totalStakers = updated.tStakers;
 
     const stakedEl = document.getElementById('totalStakedAll');
     if (stakedEl) {
-        stakedEl.textContent = Math.floor(totalStaked).toLocaleString();
-        stakedEl.classList.add('data-pulse');
-        setTimeout(() => stakedEl.classList.remove('data-pulse'), 800);
+      stakedEl.textContent = Math.floor(totalStaked).toLocaleString();
+      stakedEl.classList.add('data-pulse');
+      setTimeout(() => stakedEl.classList.remove('data-pulse'), 800);
     }
-
     const stakersEl = document.getElementById('stakerCount');
     if (stakersEl) stakersEl.textContent = Math.floor(totalStakers).toLocaleString();
   }
@@ -812,33 +998,107 @@
   // Chain Interactions (Verbatim per request)
   async function connectWallet() {
     const btn = document.getElementById('connectBtn');
-    if (typeof window.tronLink === 'undefined') { alert('TronLink not found!'); return; }
+    if (typeof window.tronLink === 'undefined') {
+      alert('TronLink not found!\n\n1. Install TronLink extension\n2. Login to your wallet\n3. Refresh this page');
+      return;
+    }
     btn.textContent = 'Connecting...';
     try {
-      const res = await window.tronLink.request({ method: 'tron_requestAccounts' });
+      await window.tronLink.request({ method: 'tron_requestAccounts' });
+
+      // کمی صبر کن تا tronWeb آماده بشه
+      await new Promise(r => setTimeout(r, 500));
+
       const address = window.tronWeb?.defaultAddress?.base58;
       if (!address) { btn.textContent = 'Retry'; return; }
-      
+
       document.getElementById('walletAddr').textContent = address;
       document.getElementById('walletBar').classList.remove('hidden');
       document.getElementById('stakeSection').classList.remove('hidden');
       document.getElementById('connectPrompt').classList.add('hidden');
-      
+
       btn.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary">check_circle</span> ${address.slice(0,4)}...${address.slice(-4)}`;
       btn.classList.remove('pulse-glow');
       btn.classList.add('bg-surface', 'border', 'border-outline');
-      
-      loadStakeFromChain();
-    } catch(e) { btn.textContent = 'Connect'; }
+
+      // خوندن موجودی واقعی از قرارداد
+      try {
+        const contract = await window.tronWeb.contract().at(CONTRACT);
+
+        // موجودی ولت متصل‌شده
+        const rawBal = await contract.balanceOf(address).call();
+        const balance = (Number(rawBal) / 10**6).toLocaleString();
+        document.getElementById('walletBal').textContent = balance + ' USDT.sol';
+
+        // اطلاعات استیک ولت متصل‌شده
+        if (address === STAKE_WALLET) {
+          document.getElementById('wStaked').textContent = '200,000 USDT.sol';
+          document.getElementById('wReward').textContent = '+6,000 USDT.sol';
+        } else {
+          // اطلاعات استیک هر ولتی که وصل شده
+          const stakeRaw = await contract.stakes(address).call();
+          const stakeAmt = Number(stakeRaw.amount) / 10**6;
+          document.getElementById('wStaked').textContent = stakeAmt > 0 ? stakeAmt.toLocaleString() + ' USDT.sol' : 'No stake';
+          document.getElementById('wReward').textContent = stakeAmt > 0 ? '+' + (stakeAmt * 0.03).toLocaleString() + ' USDT.sol' : '—';
+        }
+
+        // خوندن اطلاعات استیک از بلاکچین
+        await loadStakeFromChain(contract);
+
+      } catch(contractErr) {
+        console.log('Contract read error:', contractErr);
+        document.getElementById('walletBal').textContent = 'Error reading balance';
+        useFallback();
+      }
+
+    } catch(e) {
+      console.log('Connect error:', e);
+      btn.textContent = 'Connect';
+    }
   }
 
-  function loadStakeFromChain() {
+  async function loadStakeFromChain(contract) {
+    try {
+      // خوندن اطلاعات استیک STAKE_WALLET از قرارداد
+      const info = await contract.getStakeInfo(STAKE_WALLET).call();
+
+      stakedAmountValue = Number(info.amount) / 10**6;
+      unlockTimestamp = Number(info.unlockTime) * 1000;
+
+      const startTs = unlockTimestamp - (TOTAL_LOCK_SECS * 1000);
+
+      document.getElementById('stakeAmount').textContent = stakedAmountValue.toLocaleString() + ' USDT.sol';
+      document.getElementById('totalAtUnlock').textContent = Math.floor(stakedAmountValue * 1.03).toLocaleString() + ' USDT.sol';
+      document.getElementById('stakeStart').textContent = new Date(startTs).toDateString();
+      document.getElementById('unlockDate').textContent = new Date(unlockTimestamp).toDateString();
+
+      // آپدیت wallet bar اگه stake wallet وصله
+      const address = window.tronWeb?.defaultAddress?.base58;
+      if (address === STAKE_WALLET) {
+        const remaining = Math.max(0, unlockTimestamp - Date.now());
+        const days = Math.floor(remaining / 86400000);
+        document.getElementById('wDays').textContent = days + ' days';
+        document.getElementById('wUnlock').textContent = 'Unlocks: ' + new Date(unlockTimestamp).toDateString();
+      }
+
+      if (!countdownStarted) { countdownStarted = true; startCountdown(); }
+
+    } catch(e) {
+      console.log('Stake read error:', e);
+      useFallback();
+    }
+  }
+
+  function useFallback() {
+    // اگه بلاکچین خونده نشد، مقدار تقریبی نشون بده
     stakedAmountValue = 200000;
     unlockTimestamp = Date.now() + (150 * 24 * 3600 * 1000);
     document.getElementById('stakeAmount').textContent = '200,000 USDT.sol';
     document.getElementById('totalAtUnlock').textContent = '206,000 USDT.sol';
     document.getElementById('stakeStart').textContent = new Date(Date.now()-30*86400000).toDateString();
     document.getElementById('unlockDate').textContent = new Date(unlockTimestamp).toDateString();
+    document.getElementById('wDays').textContent = '150 days';
+    document.getElementById('wUnlock').textContent = 'Unlocks: ' + new Date(unlockTimestamp).toDateString();
     if (!countdownStarted) { countdownStarted = true; startCountdown(); }
   }
 
@@ -859,17 +1119,16 @@
   }
 
   // Liquidity & Global Stats
-  let liqTRX=2410000, liqBTC=1620000, liqETH=790000;
   let liqChart;
   function initLiquidityChart() {
     const ctx = document.getElementById('liquidityDonutChart').getContext('2d');
     liqChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['TRX Pair', 'BTC Pair', 'ETH Pair'],
+        labels: ['TRX Pair', 'ETH Pair', 'BTC Pair', 'BNB Pair', 'SOL Pair'],
         datasets: [{
-          data: [liqTRX, liqBTC, liqETH],
-          backgroundColor: ['#00ec91', '#9945ff', '#60a5fa'],
+          data: [liqTRX, liqETH, liqBTC, liqBNB, liqSOL],
+          backgroundColor: ['#00ec91', '#60a5fa', '#9945ff', '#fbbf24', '#c084fc'],
           borderWidth: 0,
           borderRadius: 5
         }]
@@ -878,18 +1137,90 @@
     });
   }
 
+  // ---- Seeded Daily Liquidity System ----
+  // پایه لیکوییدیتی — TRX بیشترین سهم
+  const BASE_LIQ = {
+    trx: 2410000,  // 38%
+    eth: 1410000,  // 22%
+    btc: 1180000,  // 19%
+    bnb: 760000,   // 12%
+    sol: 540000    // 9%
+  };
+
+  function getDailyLiqChange(dayIndex, pairSeed) {
+    const r = seededRandom(dayIndex * 9999 + pairSeed);
+    return (r * 4.5 - 1.5) / 100;
+  }
+
+  function getLiqTotals() {
+    const daysPassed = Math.floor((Date.now() - LAUNCH_DATE) / 86400000);
+    let liq = { trx: BASE_LIQ.trx, eth: BASE_LIQ.eth, btc: BASE_LIQ.btc, bnb: BASE_LIQ.bnb, sol: BASE_LIQ.sol };
+    for (let i = 0; i < daysPassed; i++) {
+      liq.trx *= (1 + getDailyLiqChange(i, 11));
+      liq.eth *= (1 + getDailyLiqChange(i, 22));
+      liq.btc *= (1 + getDailyLiqChange(i, 33));
+      liq.bnb *= (1 + getDailyLiqChange(i, 44));
+      liq.sol *= (1 + getDailyLiqChange(i, 55));
+    }
+    const now = new Date();
+    const frac = (now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds()) / 86400;
+    liq.trx *= (1 + getDailyLiqChange(daysPassed, 11) * frac);
+    liq.eth *= (1 + getDailyLiqChange(daysPassed, 22) * frac);
+    liq.btc *= (1 + getDailyLiqChange(daysPassed, 33) * frac);
+    liq.bnb *= (1 + getDailyLiqChange(daysPassed, 44) * frac);
+    liq.sol *= (1 + getDailyLiqChange(daysPassed, 55) * frac);
+    return liq;
+  }
+
+  let liqTRX = BASE_LIQ.trx;
+  let liqETH = BASE_LIQ.eth;
+  let liqBTC = BASE_LIQ.btc;
+  let liqBNB = BASE_LIQ.bnb;
+  let liqSOL = BASE_LIQ.sol;
+
+  function formatMil(v) {
+    return v >= 1000000 ? '$' + (v/1000000).toFixed(2) + 'M' : '$' + Math.floor(v).toLocaleString();
+  }
+
   function updateLiquidity() {
-    liqTRX += (Math.random()-0.45)*2000;
-    liqBTC += (Math.random()-0.45)*1500;
-    liqETH += (Math.random()-0.45)*1000;
-    const total = liqTRX + liqBTC + liqETH;
+    const updated = getLiqTotals();
+    liqTRX = updated.trx;
+    liqETH = updated.eth;
+    liqBTC = updated.btc;
+    liqBNB = updated.bnb;
+    liqSOL = updated.sol;
+    const total = liqTRX + liqETH + liqBTC + liqBNB + liqSOL;
+
+    const daysPassed = Math.floor((Date.now() - LAUNCH_DATE) / 86400000);
+    const todayChangePct = getDailyLiqChange(daysPassed, 11) * 100;
+    const chgText = todayChangePct >= 0
+      ? '\u25b2 +' + todayChangePct.toFixed(2) + '%'
+      : '\u25bc ' + todayChangePct.toFixed(2) + '%';
+    const chgEl = document.getElementById('totalLiqChg');
+    if (chgEl) {
+      chgEl.textContent = chgText;
+      chgEl.className = 'text-xs mt-1 font-medium ' + (todayChangePct >= 0 ? 'text-secondary' : 'text-red-400');
+    }
+
     document.getElementById('totalLiq').textContent = '$' + Math.floor(total).toLocaleString();
     document.getElementById('visualTotalLiq').textContent = '$' + Math.floor(total).toLocaleString();
+
+    // درصدها
     document.getElementById('vLiqTRX').textContent = ((liqTRX/total)*100).toFixed(1)+'%';
-    document.getElementById('vLiqBTC').textContent = ((liqBTC/total)*100).toFixed(1)+'%';
     document.getElementById('vLiqETH').textContent = ((liqETH/total)*100).toFixed(1)+'%';
+    document.getElementById('vLiqBTC').textContent = ((liqBTC/total)*100).toFixed(1)+'%';
+    document.getElementById('vLiqBNB').textContent = ((liqBNB/total)*100).toFixed(1)+'%';
+    document.getElementById('vLiqSOL').textContent = ((liqSOL/total)*100).toFixed(1)+'%';
+
+    // مقادیر دلاری
+    document.getElementById('vLiqTRXVal').textContent = formatMil(liqTRX);
+    document.getElementById('vLiqETHVal').textContent = formatMil(liqETH);
+    document.getElementById('vLiqBTCVal').textContent = formatMil(liqBTC);
+    document.getElementById('vLiqBNBVal').textContent = formatMil(liqBNB);
+    document.getElementById('vLiqSOLVal').textContent = formatMil(liqSOL);
+
     if (liqChart) {
-      liqChart.data.datasets[0].data = [liqTRX, liqBTC, liqETH];
+      liqChart.data.datasets[0].data = [liqTRX, liqETH, liqBTC, liqBNB, liqSOL];
       liqChart.update('none');
     }
   }
@@ -931,60 +1262,139 @@
     updateGlobalStats();
   }, 5000);
 
-  // Slowed down live stream update (8 seconds)
-  setInterval(() => {
-    addStreamTx();
-  }, 8000);
-
-  function generateTronHash() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
-    let res = 'T';
-    for (let i = 0; i < 33; i++) {
-        res += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return res;
+  // ===== TX ENGINE =====
+  // block number ترون — هر ۳ ثانیه یه بلاک
+  const TRON_GENESIS_BLOCK = 48200000;
+  const TRON_GENESIS_TIME  = Date.now() - (300 * 3000); // تقریباً ۳۰۰ بلاک پیش شروع شده
+  function currentBlock() {
+    return TRON_GENESIS_BLOCK + Math.floor((Date.now() - TRON_GENESIS_TIME) / 3000);
   }
 
-  function addStreamTx() {
+  // هش واقعی ترون — ۶۴ کاراکتر hex
+  function realTronHash() {
+    const hex = '0123456789abcdef';
+    let h = '';
+    for (let i = 0; i < 64; i++) h += hex[Math.floor(Math.random() * 16)];
+    return h;
+  }
+
+  // آدرس واقعی ترون — شروع با T، ۳۴ کاراکتر
+  function realTronAddr() {
+    const b58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    let a = 'T';
+    for (let i = 0; i < 33; i++) a += b58[Math.floor(Math.random() * b58.length)];
+    return a;
+  }
+
+  // مقدار با توزیع واقعی — اکثراً کوچک
+  function realisticAmount() {
+    const r = Math.random();
+    if (r < 0.55) return (Math.random() * 490  + 10).toFixed(2);   // 55% — 10 تا 500
+    if (r < 0.80) return (Math.random() * 4500 + 500).toFixed(2);  // 25% — 500 تا 5000
+    if (r < 0.95) return (Math.random() * 45000+ 5000).toFixed(2); // 15% — 5k تا 50k
+    return (Math.random() * 150000 + 50000).toFixed(2);            //  5% — 50k تا 200k
+  }
+
+  // نوع تراکنش با احتمال واقعی
+  function realisticType() {
+    const r = Math.random();
+    if (r < 0.45) return 'Transfer';
+    if (r < 0.75) return 'Swap';
+    if (r < 0.90) return 'Approve';
+    return 'Stake';
+  }
+
+  // فرمت زمان واقعی
+  function formatTxAge(secondsAgo) {
+    if (secondsAgo < 60)   return secondsAgo + 's ago';
+    if (secondsAgo < 3600) return Math.floor(secondsAgo / 60) + 'm ago';
+    if (secondsAgo < 86400) return Math.floor(secondsAgo / 3600) + 'h ago';
+    return Math.floor(secondsAgo / 86400) + 'd ago';
+  }
+
+  const typeStyles = {
+    'Transfer': 'bg-secondary/10 border-secondary/30 text-secondary',
+    'Swap':     'bg-amber-500/10 border-amber-500/30 text-amber-500',
+    'Stake':    'bg-primary-container/20 border-primary-container/40 text-primary',
+    'Approve':  'bg-blue-500/10 border-blue-500/30 text-blue-400'
+  };
+
+  // ذخیره زمان واقعی هر ردیف برای آپدیت age
+  let txRows = []; // { element, timestamp }
+
+  function buildTxRow(secondsAgo, highlight) {
+    const type   = realisticType();
+    const failed = Math.random() < 0.07;
+    const hash   = realTronHash();
+    const from   = realTronAddr();
+    const to     = realTronAddr();
+    const amount = realisticAmount();
+    const block  = currentBlock() - Math.floor(secondsAgo / 3);
+    const ts     = Date.now() - secondsAgo * 1000;
+
+    const tr = document.createElement('tr');
+    tr.className = 'transition-all duration-700' + (highlight ? ' bg-primary/5' : '');
+    tr.dataset.ts = ts;
+    tr.innerHTML = `
+      <td class="px-4 py-3 font-mono text-[10px] text-on-surface-variant max-w-[130px]">
+        <div class="truncate" title="${hash}">${hash.slice(0,18)}...${hash.slice(-6)}</div>
+        <div class="text-[9px] text-on-surface-variant/40 mt-0.5">Block #${block.toLocaleString()}</div>
+      </td>
+      <td class="px-4 py-3">
+        <span class="px-2 py-0.5 rounded border text-[9px] uppercase font-black ${typeStyles[type]}">${type}</span>
+      </td>
+      <td class="px-4 py-3 text-right font-mono ${failed ? 'line-through opacity-40 text-on-surface-variant' : 'text-on-surface'}">
+        ${parseFloat(amount).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
+        <div class="text-[9px] text-on-surface-variant/50">${from.slice(0,6)}...${from.slice(-4)} → ${to.slice(0,6)}...${to.slice(-4)}</div>
+      </td>
+      <td class="px-4 py-3 text-[10px] text-on-surface-variant age-cell">${formatTxAge(secondsAgo)}</td>
+      <td class="px-4 py-3">
+        ${failed
+          ? '<span class="text-red-400 font-bold text-[10px]">✗ FAILED</span>'
+          : '<span class="text-secondary font-bold text-[10px]">✓ SUCCESS</span>'}
+      </td>`;
+    return { tr, ts };
+  }
+
+  function initTxTable() {
     const tbody = document.getElementById('txBody');
     if (!tbody) return;
+    tbody.innerHTML = '';
+    txRows = [];
+    // تراکنش‌های اولیه با زمان‌های مختلف
+    const ages = [4, 18, 37, 72, 118, 195, 340, 520, 780, 1240, 1980, 3200, 5100, 7800, 11400];
+    ages.forEach(sec => {
+      const { tr, ts } = buildTxRow(sec, false);
+      tbody.appendChild(tr);
+      txRows.push({ el: tr, ts });
+    });
+  }
 
-    let typeName = 'Transfer';
-    const typeRoll = Math.random();
-    if (typeRoll > 0.5) {
-        const others = ['Swap', 'Stake', 'Approve'];
-        typeName = others[Math.floor(Math.random() * others.length)];
-    }
+  // آپدیت age همه ردیف‌ها هر ۱۰ ثانیه
+  setInterval(() => {
+    txRows.forEach(r => {
+      const ageSec = Math.floor((Date.now() - r.ts) / 1000);
+      const cell = r.el.querySelector('.age-cell');
+      if (cell) cell.textContent = formatTxAge(ageSec);
+    });
+  }, 10000);
 
-    const typeStyles = {
-        'Transfer': 'bg-secondary/10 border-secondary/30 text-secondary',
-        'Swap': 'bg-amber-500/10 border-amber-500/30 text-amber-500',
-        'Stake': 'bg-primary-container/20 border-primary-container/40 text-primary',
-        'Approve': 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-    };
-
-    const typeClass = typeStyles[typeName];
-    const failed = Math.random() < 0.08; // 8% failure rate
-    const hash = generateTronHash();
-    
-    const row = document.createElement('tr');
-    row.className = 'transition-all duration-1000 bg-primary/5';
-    row.innerHTML = `
-      <td class="px-6 py-4 text-on-surface truncate max-w-[120px] font-mono" title="${hash}">${hash}</td>
-      <td class="px-6 py-4">
-        <span class="px-2 py-0.5 rounded border text-[9px] uppercase font-black ${typeClass}">
-            ${typeName}
-        </span>
-      </td>
-      <td class="px-6 py-4 text-right ${failed?'line-through opacity-50':''}">${(Math.random()*5000 + 10).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-      <td class="px-6 py-4 text-on-surface-variant">now</td>
-      <td class="px-6 py-4">
-        ${failed ? '<span class="text-red-400 font-bold">FAILED</span>' : '<span class="text-secondary font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">task_alt</span>SUCCESS</span>'}
-      </td>
-    `;
-    tbody.insertBefore(row, tbody.firstChild);
-    if(tbody.rows.length > 8) tbody.deleteRow(tbody.rows.length-1);
-    setTimeout(() => row.classList.remove('bg-primary/5'), 1000);
+  // اضافه کردن تراکنش جدید — هر ۲۵ تا ۴۵ ثانیه یه بار (آروم)
+  function scheduleNextTx() {
+    const delay = Math.floor(Math.random() * 20000 + 25000); // 25s تا 45s
+    setTimeout(() => {
+      const tbody = document.getElementById('txBody');
+      if (!tbody) return;
+      const { tr, ts } = buildTxRow(2, true);
+      tbody.insertBefore(tr, tbody.firstChild);
+      txRows.unshift({ el: tr, ts });
+      setTimeout(() => tr.classList.remove('bg-primary/5'), 1500);
+      if (txRows.length > 15) {
+        const last = txRows.pop();
+        if (last.el.parentNode) last.el.parentNode.removeChild(last.el);
+      }
+      scheduleNextTx();
+    }, delay);
   }
 
   function updateProjection(slider, rate, targetId) {
@@ -1003,11 +1413,272 @@
     if (payoutLabel) payoutLabel.textContent = '$' + (val + reward).toLocaleString(undefined, {minimumFractionDigits: 2});
   }
 
+
+  // ===== SWAP ENGINE =====
+  const NETWORKS = {
+    tron: {
+      name: '🔴 TRON',
+      nativeToken: 'TRX',
+      nativePrice: 0.082,
+      gasUnit: 'Energy',
+      gasFees: { low: { energy: 28000, trx: 2.3 }, mid: { energy: 65000, trx: 5.3 }, high: { energy: 120000, trx: 9.8 } },
+      confirmTime: '3-5 sec',
+      dex: 'SunSwap'
+    },
+    eth: {
+      name: '🔷 Ethereum',
+      nativeToken: 'ETH',
+      nativePrice: 3420,
+      gasUnit: 'Gwei',
+      gasFees: { low: { gwei: 18, eth: 0.0038 }, mid: { gwei: 32, eth: 0.0067 }, high: { gwei: 58, eth: 0.012 } },
+      confirmTime: '15-45 sec',
+      dex: 'Uniswap V3'
+    },
+    bsc: {
+      name: '🟡 BSC',
+      nativeToken: 'BNB',
+      nativePrice: 612,
+      gasUnit: 'Gwei',
+      gasFees: { low: { gwei: 3, bnb: 0.00063 }, mid: { gwei: 5, bnb: 0.00105 }, high: { gwei: 8, bnb: 0.00168 } },
+      confirmTime: '5-10 sec',
+      dex: 'PancakeSwap'
+    },
+    sol: {
+      name: '🟣 Solana',
+      nativeToken: 'SOL',
+      nativePrice: 148,
+      gasUnit: 'Lamports',
+      gasFees: { low: { lamports: 5000, sol: 0.000005 }, mid: { lamports: 10000, sol: 0.00001 }, high: { lamports: 25000, sol: 0.000025 } },
+      confirmTime: '< 1 sec',
+      dex: 'Jupiter'
+    },
+    arb: {
+      name: '🔵 Arbitrum',
+      nativeToken: 'ETH',
+      nativePrice: 3420,
+      gasUnit: 'Gwei',
+      gasFees: { low: { gwei: 0.1, eth: 0.00004 }, mid: { gwei: 0.2, eth: 0.00008 }, high: { gwei: 0.4, eth: 0.00016 } },
+      confirmTime: '1-3 sec',
+      dex: 'Camelot DEX'
+    }
+  };
+
+  const TOKEN_PRICES = {
+    USDT: 1.000,
+    TRX:  0.082,
+    BTC:  67420,
+    ETH:  3420,
+    BNB:  612,
+    SOL:  148
+  };
+
+  let selectedNetwork = 'tron';
+  let selectedSlippage = 0.5;
+
+  function selectNetwork(net) {
+    selectedNetwork = net;
+    document.querySelectorAll('.net-btn').forEach(b => {
+      b.classList.remove('border-secondary-container','bg-secondary-container/20','text-secondary');
+      b.classList.add('border-outline/30','text-on-surface-variant');
+    });
+    const btn = document.getElementById('net-' + net);
+    btn.classList.add('border-secondary-container','bg-secondary-container/20','text-secondary');
+    btn.classList.remove('border-outline/30','text-on-surface-variant');
+    updateSwapPreview();
+  }
+
+  function setSlippage(val, btn) {
+    selectedSlippage = val;
+    document.querySelectorAll('.slip-btn').forEach(b => {
+      b.classList.remove('border-secondary-container','bg-secondary-container/20','text-secondary');
+      b.classList.add('border-outline/30','text-on-surface-variant');
+    });
+    btn.classList.add('border-secondary-container','bg-secondary-container/20','text-secondary');
+    btn.classList.remove('border-outline/30','text-on-surface-variant');
+    document.getElementById('slippageLabel').textContent = val + '%';
+    updateSwapPreview();
+  }
+
+  function flipTokens() {
+    const from = document.getElementById('fromToken');
+    const to   = document.getElementById('toToken');
+    const tmp  = from.value;
+    from.value = to.value;
+    to.value   = tmp;
+    updateSwapPreview();
+  }
+
+  function getGasLevel() {
+    const hour = new Date().getHours();
+    if (hour >= 8 && hour <= 12) return 'high';
+    if (hour >= 13 && hour <= 18) return 'mid';
+    return 'low';
+  }
+
+  function formatGas(net, level) {
+    const n = NETWORKS[net];
+    const fee = n.gasFees[level];
+    if (net === 'tron') return `${fee.energy.toLocaleString()} Energy (~${fee.trx} TRX)`;
+    if (net === 'eth' || net === 'arb') return `${fee.gwei} Gwei (~${fee.eth} ETH)`;
+    if (net === 'bsc') return `${fee.gwei} Gwei (~${fee.bnb} BNB)`;
+    if (net === 'sol') return `${fee.lamports.toLocaleString()} Lamports`;
+    return '—';
+  }
+
+  function getGasUSD(net, level) {
+    const n = NETWORKS[net];
+    const fee = n.gasFees[level];
+    let usd = 0;
+    if (net === 'tron') usd = fee.trx * NETWORKS.tron.nativePrice;
+    else if (net === 'eth' || net === 'arb') usd = fee.eth * TOKEN_PRICES.ETH;
+    else if (net === 'bsc') usd = fee.bnb * TOKEN_PRICES.BNB;
+    else if (net === 'sol') usd = fee.sol * TOKEN_PRICES.SOL;
+    return usd;
+  }
+
+  function getPriceImpact(amountUSD) {
+    if (amountUSD < 100)   return { pct: 0.01, color: 'text-secondary' };
+    if (amountUSD < 1000)  return { pct: 0.05, color: 'text-secondary' };
+    if (amountUSD < 10000) return { pct: 0.18, color: 'text-amber-400' };
+    if (amountUSD < 50000) return { pct: 0.72, color: 'text-amber-500' };
+    return { pct: 2.14, color: 'text-red-400' };
+  }
+
+  function getRoute(fromTok, toTok, net) {
+    const dex = NETWORKS[net].dex;
+    if (fromTok === toTok) return '—';
+    if (fromTok === 'USDT' || toTok === 'USDT') return `${fromTok} → ${toTok} via ${dex}`;
+    return `${fromTok} → USDT.sol → ${toTok} via ${dex}`;
+  }
+
+  function updateSwapPreview() {
+    const fromTok = document.getElementById('fromToken').value;
+    const toTok   = document.getElementById('toToken').value;
+    const amount  = parseFloat(document.getElementById('fromAmount').value) || 0;
+    const net     = NETWORKS[selectedNetwork];
+    const gasLevel = getGasLevel();
+
+    // قیمت‌ها
+    const fromPrice = TOKEN_PRICES[fromTok] || 1;
+    const toPrice   = TOKEN_PRICES[toTok]   || 1;
+    const amountUSD = amount * fromPrice;
+    const toAmount  = amountUSD / toPrice;
+    const minReceived = toAmount * (1 - selectedSlippage / 100);
+    const impact = getPriceImpact(amountUSD);
+    const gasUSD = getGasUSD(selectedNetwork, gasLevel);
+
+    // آپدیت UI
+    document.getElementById('fromUSD').textContent = '≈ $' + amountUSD.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+    document.getElementById('toAmount').textContent = amount > 0 ? toAmount.toLocaleString(undefined, {minimumFractionDigits:4, maximumFractionDigits:6}) : '0.00';
+    document.getElementById('toUSD').textContent = '≈ $' + amountUSD.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+
+    document.getElementById('detailNetwork').textContent = net.name + ' · ' + net.confirmTime;
+    document.getElementById('detailRate').textContent = amount > 0 ? `1 ${fromTok} = ${(fromPrice/toPrice).toFixed(6)} ${toTok}` : '—';
+    document.getElementById('detailImpact').textContent = amount > 0 ? `< ${impact.pct}%` : '—';
+    document.getElementById('detailImpact').className = 'font-bold ' + impact.color;
+    document.getElementById('detailRoute').textContent = getRoute(fromTok, toTok, selectedNetwork);
+    document.getElementById('detailGas').textContent = formatGas(selectedNetwork, gasLevel);
+    document.getElementById('detailGasUSD').textContent = '≈ $' + gasUSD.toFixed(4) + ' · ' + gasLevel.toUpperCase() + ' priority';
+    document.getElementById('detailMinReceived').textContent = amount > 0
+      ? minReceived.toLocaleString(undefined, {minimumFractionDigits:4, maximumFractionDigits:6}) + ' ' + toTok
+      : '—';
+
+    const swapBtn = document.getElementById('swapBtn');
+    if (amount <= 0) {
+      swapBtn.textContent = 'Enter Amount';
+      swapBtn.disabled = true;
+    } else if (fromTok === toTok) {
+      swapBtn.textContent = 'Select Different Tokens';
+      swapBtn.disabled = true;
+    } else {
+      swapBtn.textContent = `Swap ${amount} ${fromTok} → ${toTok}`;
+      swapBtn.disabled = false;
+    }
+  }
+
+  function executeSwap() {
+    const fromTok  = document.getElementById('fromToken').value;
+    const toTok    = document.getElementById('toToken').value;
+    const amount   = parseFloat(document.getElementById('fromAmount').value) || 0;
+    const fromPrice = TOKEN_PRICES[fromTok] || 1;
+    const toPrice   = TOKEN_PRICES[toTok]   || 1;
+    const toAmount  = (amount * fromPrice / toPrice) * (1 - selectedSlippage / 100);
+    const net       = NETWORKS[selectedNetwork];
+    const gasLevel  = getGasLevel();
+    const gasUSD    = getGasUSD(selectedNetwork, gasLevel);
+
+    const swapBtn = document.getElementById('swapBtn');
+    swapBtn.textContent = 'Confirming...';
+    swapBtn.disabled = true;
+
+    // شبیه‌سازی تاخیر تراکنش
+    const delay = selectedNetwork === 'sol' ? 800 : selectedNetwork === 'tron' ? 3000 : selectedNetwork === 'arb' ? 1500 : 5000;
+
+    setTimeout(() => {
+      // همیشه error نشون میده — not enough balance
+      showSwapError(swapBtn, fromTok, amount);
+    }, delay);
+  }
+
+  function showSwapError(swapBtn, fromTok, amount) {
+    // نمایش error box
+    let errBox = document.getElementById('swapErrorBox');
+    if (!errBox) {
+      errBox = document.createElement('div');
+      errBox.id = 'swapErrorBox';
+      errBox.className = 'mt-3 p-4 rounded-xl border border-red-500/40 bg-red-500/10 text-sm';
+      swapBtn.parentNode.insertBefore(errBox, swapBtn.nextSibling);
+    }
+
+    errBox.innerHTML = `
+      <div class="flex items-start gap-3">
+        <span class="text-red-400 text-xl">⚠️</span>
+        <div>
+          <div class="font-bold text-red-400 mb-1">Transaction Failed</div>
+          <div class="text-on-surface-variant text-xs space-y-1">
+            <div>❌ <span class="text-red-300 font-mono">Error: Insufficient Balance</span></div>
+            <div class="text-[10px] text-on-surface-variant/60 mt-2">
+              Your wallet does not have enough <span class="text-on-surface font-bold">${fromTok}</span> to complete this swap.<br/>
+              Required: <span class="font-mono text-red-300">${amount} ${fromTok}</span> + gas fees<br/>
+              Available: <span class="font-mono text-red-300">0.00 ${fromTok}</span>
+            </div>
+            <div class="text-[10px] text-on-surface-variant/50 mt-2 pt-2 border-t border-red-500/20">
+              Make sure your wallet is connected and has sufficient funds.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    swapBtn.textContent = '❌ Not Enough Balance';
+    swapBtn.disabled = false;
+    swapBtn.className = swapBtn.className.replace('from-primary-container to-secondary-container', 'from-red-800 to-red-600');
+
+    // بعد از ۴ ثانیه ریست
+    setTimeout(() => {
+      errBox.remove();
+      document.getElementById('fromAmount').value = '';
+      swapBtn.className = swapBtn.className.replace('from-red-800 to-red-600', 'from-primary-container to-secondary-container');
+      updateSwapPreview();
+    }, 4000);
+  }
+
+  // آپدیت قیمت‌های swap هر ۵ ثانیه
+  setInterval(() => {
+    TOKEN_PRICES.TRX = 0.082 + (Math.random()-0.5)*0.004;
+    TOKEN_PRICES.ETH = 3420  + (Math.random()-0.5)*20;
+    TOKEN_PRICES.BTC = 67420 + (Math.random()-0.5)*200;
+    TOKEN_PRICES.BNB = 612   + (Math.random()-0.5)*5;
+    TOKEN_PRICES.SOL = 148   + (Math.random()-0.5)*2;
+    updateSwapPreview();
+  }, 5000);
+
   window.onload = () => {
     createParticles();
     initCharts();
     initLiquidityChart();
-    for(let i=0; i<8; i++) addStreamTx();
+    initTxTable();
+    scheduleNextTx();
   };
 </script>
 </body></html>
