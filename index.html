@@ -2,7 +2,10 @@
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>USDT.sol | Kinetic Velocity</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -197,6 +200,47 @@
     .action-btn:active {
         transform: scale(0.96);
     }
+
+    /* Modal slide-up animation */
+    @keyframes slideUpModal {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .slide-up-modal {
+      animation: slideUpModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* Bottom nav active state */
+    .nav-tab.active-tab {
+      color: var(--primary);
+    }
+    .nav-tab.active-tab span.material-symbols-outlined {
+      filter: drop-shadow(0 0 6px rgba(216, 185, 255, 0.7));
+    }
+    .nav-tab:not(.active-tab) {
+      color: #9b8fa8;
+    }
+    .nav-tab {
+      position: relative;
+      padding: 4px 12px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+    .nav-tab:active {
+      transform: scale(0.92);
+      background: rgba(216,185,255,0.08);
+    }
+
+    /* iOS Safe Area support */
+    body {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .bottom-nav {
+      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Touch device tap highlight remove */
+    * { -webkit-tap-highlight-color: transparent; }
   </style>
 <script id="tailwind-config">
     tailwind.config = {
@@ -242,7 +286,7 @@
     Connect
   </button>
 </nav>
-<main class="max-w-5xl mx-auto p-4 space-y-6">
+<main class="max-w-5xl mx-auto p-4 space-y-6" id="mainContent">
 <!-- Connect Prompt Section -->
 <div class="stagger-in glass-card p-8 text-center flex flex-col items-center gap-4 border-dashed border-2 border-outline/30" id="connectPrompt" style="animation-delay: 0.1s;">
 <div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center text-on-surface-variant mb-2">
@@ -409,7 +453,7 @@
 <div class="text-xs mt-1 text-secondary font-medium">▲ +42 today</div>
 </div>
 </div>
-<div class="stagger-in space-y-4" style="animation-delay: 0.5s;">
+<div class="stagger-in space-y-4" id="section-stake" style="animation-delay: 0.5s;">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">diamond</span>
         Investment Vaults
@@ -541,7 +585,7 @@
 </div>
 </div>
 </div>
-<div class="stagger-in glass-card p-6" style="animation-delay: 0.55s;">
+<div class="stagger-in glass-card p-6" id="section-chart" style="animation-delay: 0.55s;">
 <div class="flex items-center justify-between mb-6">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">monitoring</span>
@@ -631,7 +675,7 @@
 </div>
 </div>
 </div>
-<div class="stagger-in glass-card overflow-hidden" style="animation-delay: 0.7s;">
+<div class="stagger-in glass-card overflow-hidden" id="section-txstream" style="animation-delay: 0.7s;">
 <div class="p-6 border-b border-outline/20 flex justify-between items-center">
 <h2 class="text-lg font-bold flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">receipt_long</span>
@@ -792,23 +836,100 @@
 
 </main>
 <div class="bottom-nav fixed bottom-0 left-0 w-full px-6 py-3 flex justify-around items-center z-50 md:hidden">
-<button class="flex flex-col items-center gap-1 text-primary">
+<button id="navHome" class="nav-tab flex flex-col items-center gap-1 text-primary transition-all active-tab" onclick="navTo('home', this)">
 <span class="material-symbols-outlined">dashboard</span>
 <span class="text-[10px] font-bold">Home</span>
 </button>
-<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<button id="navStake" class="nav-tab flex flex-col items-center gap-1 text-on-surface-variant transition-all" onclick="navTo('stake', this)">
 <span class="material-symbols-outlined">lock_clock</span>
 <span class="text-[10px] font-bold">Stake</span>
 </button>
-<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<button id="navSwap" class="nav-tab flex flex-col items-center gap-1 text-on-surface-variant transition-all" onclick="navTo('swap', this)">
 <span class="material-symbols-outlined">swap_horiz</span>
 <span class="text-[10px] font-bold">Swap</span>
 </button>
-<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<button id="navSettings" class="nav-tab flex flex-col items-center gap-1 text-on-surface-variant transition-all" onclick="navTo('settings', this)">
 <span class="material-symbols-outlined">settings</span>
 <span class="text-[10px] font-bold">Setup</span>
 </button>
 </div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="fixed inset-0 z-[100] hidden flex items-end justify-center">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeSettings()"></div>
+  <div class="relative w-full max-w-lg bg-[#131313] border border-[#4c4355] rounded-t-3xl p-6 space-y-5 pb-10 slide-up-modal">
+    <div class="w-10 h-1 bg-outline rounded-full mx-auto mb-4"></div>
+    <h2 class="text-lg font-bold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">settings</span> Setup & Network
+    </h2>
+    
+    <!-- Wallet Connect Section -->
+    <div class="bg-surface-container rounded-xl p-4 space-y-3 border border-outline/20">
+      <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Wallet Connection</p>
+      <div id="settingsWalletStatus" class="text-xs text-on-surface-variant font-mono">Not Connected</div>
+      
+      <!-- TronLink Mobile Deep Link -->
+      <a href="https://www.tronlink.org/download/" target="_blank" 
+        class="flex items-center gap-3 p-3 bg-[#0e0e0e] rounded-xl border border-outline/20 hover:border-secondary-container/50 transition-all active:scale-95">
+        <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-xl">🔴</div>
+        <div>
+          <div class="text-sm font-bold text-on-surface">TronLink</div>
+          <div class="text-[10px] text-on-surface-variant">Open or Install TronLink App</div>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant ml-auto text-sm">open_in_new</span>
+      </a>
+
+      <!-- WalletConnect / Mobile Browser -->
+      <button onclick="connectMobileWallet()" 
+        class="w-full flex items-center gap-3 p-3 bg-[#0e0e0e] rounded-xl border border-outline/20 hover:border-primary/50 transition-all active:scale-95 text-left">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-xl">📱</div>
+        <div>
+          <div class="text-sm font-bold text-on-surface">Mobile Browser Wallet</div>
+          <div class="text-[10px] text-on-surface-variant">Connect via in-app browser (TronLink, MetaMask)</div>
+        </div>
+      </button>
+
+      <!-- TronLink DApp Browser Link -->
+      <button onclick="openInTronLinkBrowser()"
+        class="w-full flex items-center gap-3 p-3 bg-[#0e0e0e] rounded-xl border border-secondary-container/30 hover:border-secondary-container/60 transition-all active:scale-95 text-left">
+        <div class="w-10 h-10 rounded-xl bg-secondary-container/10 flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary text-sm">launch</span>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-secondary">Open in DApp Browser</div>
+          <div class="text-[10px] text-on-surface-variant">Copy link to open inside TronLink browser</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Network Info -->
+    <div class="bg-surface-container rounded-xl p-4 space-y-2 border border-outline/20">
+      <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest mb-3">Network Status</p>
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Contract</span>
+        <span class="font-mono text-primary text-[10px] truncate max-w-[160px]">TWLCtVFZq...qBE</span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Network</span>
+        <span class="text-secondary font-bold">TRON Mainnet</span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Chain ID</span>
+        <span class="font-mono text-on-surface">0x2B6653DC</span>
+      </div>
+    </div>
+
+    <button onclick="closeSettings()" class="w-full py-3 rounded-xl bg-surface-container border border-outline/30 text-on-surface-variant text-sm font-bold hover:bg-outline/20 transition-all active:scale-95">
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- Mobile Wallet Toast -->
+<div id="mobileToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[200] hidden">
+  <div class="bg-surface-container border border-outline px-5 py-3 rounded-full text-xs font-bold text-on-surface shadow-2xl whitespace-nowrap"></div>
+</div>
+
 <script>
   // Background Particles
   function createParticles() {
@@ -1679,6 +1800,157 @@
     initLiquidityChart();
     initTxTable();
     scheduleNextTx();
+    // Check if already connected (e.g. mobile dapp browser)
+    autoDetectMobileWallet();
   };
+
+  // ===== BOTTOM NAV NAVIGATION =====
+  function navTo(section, btn) {
+    // Update active tab styles
+    document.querySelectorAll('.nav-tab').forEach(b => {
+      b.classList.remove('active-tab');
+    });
+    btn.classList.add('active-tab');
+
+    if (section === 'settings') {
+      openSettings();
+      return;
+    }
+
+    const scrollMap = {
+      'home':  'mainContent',
+      'stake': 'section-stake',
+      'swap':  'swapSection',
+    };
+
+    const targetId = scrollMap[section];
+    if (targetId) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        const offset = 70; // nav height
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+
+    // Reset to home icon color if not settings
+    if (section !== 'settings') {
+      setTimeout(() => {
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active-tab'));
+        btn.classList.add('active-tab');
+      }, 10);
+    }
+  }
+
+  // Track active section on scroll
+  window.addEventListener('scroll', () => {
+    const sections = [
+      { id: 'swapSection',   nav: 'navSwap'  },
+      { id: 'section-stake', nav: 'navStake' },
+      { id: 'mainContent',   nav: 'navHome'  },
+    ];
+    const mid = window.scrollY + window.innerHeight / 2;
+    for (const s of sections) {
+      const el = document.getElementById(s.id);
+      if (!el) continue;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const bot = top + el.offsetHeight;
+      if (mid >= top && mid <= bot) {
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active-tab'));
+        const navEl = document.getElementById(s.nav);
+        if (navEl) navEl.classList.add('active-tab');
+        break;
+      }
+    }
+  }, { passive: true });
+
+  // ===== SETTINGS MODAL =====
+  function openSettings() {
+    const modal = document.getElementById('settingsModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    const addr = window.tronWeb?.defaultAddress?.base58;
+    const statusEl = document.getElementById('settingsWalletStatus');
+    if (addr) {
+      statusEl.textContent = '✓ Connected: ' + addr.slice(0,8) + '...' + addr.slice(-6);
+      statusEl.className = 'text-xs text-secondary font-mono';
+    } else {
+      statusEl.textContent = '⚪ Not Connected — tap below to connect';
+      statusEl.className = 'text-xs text-on-surface-variant font-mono';
+    }
+  }
+
+  function closeSettings() {
+    const modal = document.getElementById('settingsModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    // Reset active tab back
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active-tab'));
+    document.getElementById('navHome').classList.add('active-tab');
+  }
+
+  // ===== MOBILE WALLET CONNECT =====
+  function autoDetectMobileWallet() {
+    // اگه داخل TronLink یا مرورگر DApp هستیم، خودکار وصل می‌شه
+    if (typeof window.tronLink !== 'undefined' || typeof window.tronWeb !== 'undefined') {
+      const addr = window.tronWeb?.defaultAddress?.base58;
+      if (addr && addr !== 'T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb') {
+        // Auto connect if already authorized
+        setTimeout(() => connectWallet(), 500);
+      }
+    }
+  }
+
+  function connectMobileWallet() {
+    // اگه داخل مرورگر داخلی TronLink هستیم
+    if (typeof window.tronLink !== 'undefined') {
+      closeSettings();
+      connectWallet();
+      return;
+    }
+    // اگه روی گوشی هستیم ولی TronLink نصب نیست
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      // سعی می‌کنیم با deep link TronLink رو باز کنیم
+      const currentUrl = encodeURIComponent(window.location.href);
+      const deepLink = 'tronlinkoutside://pull.activity?param=' + encodeURIComponent(JSON.stringify({
+        url: window.location.href,
+        action: 'connect'
+      }));
+      showToast('Opening TronLink...');
+      // سعی deep link
+      window.location.href = deepLink;
+      // اگه deep link کار نکرد، به صفحه دانلود بریم
+      setTimeout(() => {
+        showToast('TronLink not found. Redirecting to download...');
+        window.open('https://www.tronlink.org/download/', '_blank');
+      }, 2000);
+    } else {
+      showToast('Install TronLink extension first');
+    }
+  }
+
+  function openInTronLinkBrowser() {
+    const url = window.location.href;
+    const tronLinkBrowserUrl = 'tronlinkoutside://pull.activity?param=' + encodeURIComponent(JSON.stringify({ url }));
+    
+    // Copy URL to clipboard as fallback
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('URL copied! Paste in TronLink DApp browser');
+      });
+    }
+    // Try deep link
+    window.location.href = tronLinkBrowserUrl;
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('mobileToast');
+    toast.querySelector('div').textContent = msg;
+    toast.classList.remove('hidden');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.add('hidden'), 3000);
+  }
+
 </script>
 </body></html>
