@@ -445,12 +445,12 @@
 <div class="stagger-in glass-card p-4 transition-all" id="totalStakedCard" style="animation-delay: 0.3s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Staked</h3>
 <div class="text-2xl font-bold text-primary font-geist data-pulse" id="totalStakedAll">6,450,210</div>
-<div class="text-xs mt-1 text-secondary font-medium">▲ +185,400 today</div>
+<div class="text-xs mt-1 text-secondary font-medium" id="todayStakedChange">▲ +185,400 today</div>
 </div>
 <div class="stagger-in glass-card p-4" style="animation-delay: 0.35s;">
 <h3 class="text-[10px] font-bold text-on-surface-variant uppercase mb-2 tracking-widest">Total Stakers</h3>
 <div class="text-2xl font-bold text-on-surface font-geist" id="stakerCount">12,842</div>
-<div class="text-xs mt-1 text-secondary font-medium">▲ +42 today</div>
+<div class="text-xs mt-1 text-secondary font-medium" id="todayStakersChange">▲ +42 today</div>
 </div>
 </div>
 <div class="stagger-in space-y-4" id="section-stake" style="animation-delay: 0.5s;">
@@ -1018,6 +1018,20 @@
     }
     const stakersEl = document.getElementById('stakerCount');
     if (stakersEl) stakersEl.textContent = Math.floor(totalStakers).toLocaleString();
+
+    // آپدیت اعداد امروز بر اساس سیستم seeded
+    const daysPassed = Math.floor((Date.now() - LAUNCH_DATE) / 86400000);
+    const todayInc = getDailyIncrement(daysPassed);
+    const now = new Date();
+    const fractionOfDay = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400;
+    const todayStaked  = Math.floor(todayInc.staked  * fractionOfDay);
+    const todayStakers = Math.floor(todayInc.stakers * fractionOfDay);
+
+    const todayStakedEl = document.getElementById('todayStakedChange');
+    if (todayStakedEl) todayStakedEl.textContent = '\u25b2 +' + todayStaked.toLocaleString() + ' today';
+
+    const todayStakersEl = document.getElementById('todayStakersChange');
+    if (todayStakersEl) todayStakersEl.textContent = '\u25b2 +' + todayStakers + ' today';
   }
 
   // Chart Management
